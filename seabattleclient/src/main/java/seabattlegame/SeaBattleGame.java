@@ -46,6 +46,7 @@ public class SeaBattleGame implements ISeaBattleGame {
   @Override
   public void notifyWhenReady(int playerNr) {
     throw new UnsupportedOperationException("Method notifyWhenReady() not implemented.");
+    //is ie echt ready???? zo niet: seabtalleapplication.showErrorMessage();
   }
 
   @Override

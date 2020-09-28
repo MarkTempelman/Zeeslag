@@ -3,3 +3,7 @@
 2020-09-28 10:13:28,180 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for aa - Select square in aa's grid to place ships
 2020-09-28 10:19:05,852 [JavaFX Application Thread] [INFO ] seabattlegui.SeaBattleApplication - Seabattle started
 2020-09-28 10:19:10,148 [JavaFX Application Thread] [DEBUG] seabattlegame.SeaBattleGame - Register Player bb - password bb
+2020-09-28 10:46:56,600 [JavaFX Application Thread] [INFO ] seabattlegui.SeaBattleApplication - Seabattle started
+2020-09-28 11:06:06,390 [JavaFX Application Thread] [INFO ] seabattlegui.SeaBattleApplication - Seabattle started
+2020-09-28 11:06:07,769 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for  - Select square in 's grid to place ships
+2020-09-28 11:06:09,206 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for  - Select square in 's grid to place ships

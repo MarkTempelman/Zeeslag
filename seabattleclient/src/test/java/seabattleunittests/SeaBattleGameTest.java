@@ -8,6 +8,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import seabattlegame.ISeaBattleGame;
 import seabattlegame.SeaBattleGame;
+import seabattlegui.ShipType;
+import seabattlegui.ShotType;
 import seabattlegui.SquareState;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -87,7 +89,66 @@ class SeaBattleGameTest {
         int actualResult = applicationPlayer.numberSquaresPlayerWithSquareState(SquareState.SHIP);
         assertEquals(expectedResult,actualResult, "Wrong number of squares where ships are placed");
     }
-    
+
+    @Test
+    void testPlaceShip(){
+        game.placeShip(0, ShipType.CRUISER, 4, 4, true);
+
+        int expectedResult = 3;
+        int actualResult = applicationPlayer.numberSquaresPlayerWithSquareState(SquareState.SHIP);
+
+        assertEquals(expectedResult,actualResult, "Wrong number of squares where ships are placed");
+    }
+
+    @Test
+    void testRemoveShip(){
+        game.placeShip(0, ShipType.CRUISER, 4, 4, true);
+        game.removeShip(0, 4, 4);
+
+        int expectedResult = 0;
+        int actualResult = applicationPlayer.numberSquaresPlayerWithSquareState(SquareState.SHIP);
+
+        assertEquals(expectedResult,actualResult, "There are still ships.");
+    }
+
+    @Test
+    void testRemoveAllShips(){
+        game.placeShip(0, ShipType.CRUISER, 4, 4, true);
+        game.placeShip(0, ShipType.MINESWEEPER, 2, 4, true);
+        game.removeAllShips(0);
+
+        int expectedResult = 0;
+        int actualResult = applicationPlayer.numberSquaresPlayerWithSquareState(SquareState.SHIP);
+
+        assertEquals(expectedResult,actualResult, "There are still ships.");
+    }
+
+    @Test
+    void testNotifyWhenReady(){
+        game.notifyWhenReady(0);
+        String error = applicationPlayer.getErrorMessage();
+        String expected = "Not all ships have been placed!";
+        assertEquals(expected,error, "This isn't right");
+    }
+
+    @Test
+    void testFireShot(){
+        game.fireShot(0, 3, 3);
+        ShotType t = applicationPlayer.getLastShotPlayer();
+        ShotType expected = ShotType.MISSED;
+        assertEquals(expected,t, "It was a different ShotType.");
+    }
+
+    @Test
+    void testStartNewGame(){
+        game.placeShip(0, ShipType.CRUISER, 4, 4, true);
+        game.placeShip(0, ShipType.MINESWEEPER, 2, 4, true);
+
+        game.startNewGame(0);
+        int expectedResult = 0;
+        int actualResult = applicationPlayer.numberSquaresPlayerWithSquareState(SquareState.SHIP);
+        assertEquals(expectedResult,actualResult, "There are still ships, so the board hasn't been cleared.");
+    }
     // TODO add test methods here.
     // The methods must be annotated with annotation @Test. 
 }

@@ -5,3 +5,5 @@
 2020-09-28 10:38:14,090 [main] [DEBUG] seabattlegame.SeaBattleGame - Register Player null - password password
 2020-09-28 10:40:02,500 [main] [DEBUG] seabattlegame.SeaBattleGame - Register Player null - password password
 2020-09-28 10:40:02,512 [main] [DEBUG] seabattlegame.SeaBattleGame - Register Player Some Name - password Some Password
+2020-09-28 10:46:46,809 [main] [DEBUG] seabattlegame.SeaBattleGame - Register Player null - password password
+2020-09-28 10:46:46,815 [main] [DEBUG] seabattlegame.SeaBattleGame - Register Player Some Name - password Some Password
