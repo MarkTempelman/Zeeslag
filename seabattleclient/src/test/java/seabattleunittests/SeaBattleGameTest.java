@@ -10,8 +10,7 @@ import seabattlegame.ISeaBattleGame;
 import seabattlegame.SeaBattleGame;
 import seabattlegui.SquareState;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 /**
@@ -53,11 +52,19 @@ class SeaBattleGameTest {
     @Test() // expected=IllegalArgumentException.class
     void testRegisterPlayerNameNull() {
 
+
         // Register player with parameter name null in single-player mode
         String name = null;
         String password = "password";
         boolean singlePlayerMode = true;
-        game.registerPlayer(name, password, applicationPlayer, singlePlayerMode);
+
+        IllegalArgumentException thrown = assertThrows(
+                IllegalArgumentException.class,
+                () -> game.registerPlayer(name, password, applicationPlayer, singlePlayerMode),
+                "Expected registerPlayer() to throw, but it didn't"
+        );
+
+        assertTrue(thrown.getMessage().contains("Username"));
     }
     
     /**
