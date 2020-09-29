@@ -3,6 +3,7 @@
  */
 package seabattlegame;
 
+import Logica.GameServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import seabattlegui.ISeaBattleGUI;
@@ -16,11 +17,18 @@ import seabattlegui.ShipType;
 public class SeaBattleGame implements ISeaBattleGame {
 
   private static final Logger log = LoggerFactory.getLogger(SeaBattleGame.class);
+  ISeaBattleGUI application;
+  String name;
+  boolean singlePlayerMode;
+  GameServer server;
+
 
   @Override
   public void registerPlayer(String name, String password, ISeaBattleGUI application, boolean singlePlayerMode) {
     log.debug("Register Player {} - password {}", name, password);
-    //throw new UnsupportedOperationException("Method registerPlayer() not implemented.");
+    this.application = application;
+    this.name = name;
+    this.singlePlayerMode = singlePlayerMode;
   }
 
   @Override
@@ -41,6 +49,7 @@ public class SeaBattleGame implements ISeaBattleGame {
   @Override
   public void removeAllShips(int playerNr) {
     throw new UnsupportedOperationException("Method removeAllShips() not implemented.");
+
   }
 
   @Override
