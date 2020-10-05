@@ -68,6 +68,26 @@ class SeaBattleGameTest {
 
         assertTrue(thrown.getMessage().contains("Username"));
     }
+
+    @Test()
+    void testRegisterPlayerPasswordNull() {
+        String name = "name";
+        String password = "";
+        boolean singlePlayerMode = true;
+
+        IllegalArgumentException thrown = assertThrows(
+                IllegalArgumentException.class,
+                () -> game.registerPlayer(name, password, applicationPlayer, singlePlayerMode),
+                "Expected registerPlayer() to throw, but it didn't"
+        );
+
+        assertTrue(thrown.getMessage().contains("Username"));
+    }
+
+    @Test()
+    void testRegisterPlayerApplicationNull(){
+
+    }
     
     /**
      * Example test for method placeShipsAutomatically().
