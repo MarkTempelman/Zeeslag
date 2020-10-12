@@ -81,12 +81,22 @@ class SeaBattleGameTest {
                 "Expected registerPlayer() to throw, but it didn't"
         );
 
-        assertTrue(thrown.getMessage().contains("Username"));
+        assertTrue(thrown.getMessage().contains("Password"));
     }
 
     @Test()
     void testRegisterPlayerApplicationNull(){
+        String name = "name";
+        String password = "password";
+        boolean singlePlayerMode = true;
 
+        IllegalArgumentException thrown = assertThrows(
+                IllegalArgumentException.class,
+                () -> game.registerPlayer(name, password, null, singlePlayerMode),
+                "Expected registerPlayer() to throw, but it didn't"
+        );
+
+        assertTrue(thrown.getMessage().contains("application"));
     }
     
     /**
@@ -121,11 +131,42 @@ class SeaBattleGameTest {
     }
 
     @Test
+    void placeShipOutOfBounds(){
+        game.placeShip(0, ShipType.CRUISER, 9, 9, true);
+
+        int expectedResult = 0;
+        int actualResult = applicationPlayer.numberSquaresPlayerWithSquareState(SquareState.SHIP);
+
+        assertEquals(expectedResult,actualResult, "Wrong number of squares where ships are placed");
+    }
+
+    @Test
+    void testPlaceShipVertical(){
+        game.placeShip(0, ShipType.CRUISER, 4, 4, false);
+
+        int expectedResult = 3;
+        int actualResult = applicationPlayer.numberSquaresPlayerWithSquareState(SquareState.SHIP);
+
+        assertEquals(expectedResult,actualResult, "Wrong number of squares where ships are placed");
+    }
+
+    @Test
     void testRemoveShip(){
         game.placeShip(0, ShipType.CRUISER, 4, 4, true);
         game.removeShip(0, 4, 4);
 
         int expectedResult = 0;
+        int actualResult = applicationPlayer.numberSquaresPlayerWithSquareState(SquareState.SHIP);
+
+        assertEquals(expectedResult,actualResult, "There are still ships.");
+    }
+
+    @Test
+    void testRemoveShipNoShip(){
+        game.placeShip(0, ShipType.CRUISER, 4, 4, true);
+        game.removeShip(0, 9, 9);
+
+        int expectedResult = 3;
         int actualResult = applicationPlayer.numberSquaresPlayerWithSquareState(SquareState.SHIP);
 
         assertEquals(expectedResult,actualResult, "There are still ships.");
@@ -152,6 +193,19 @@ class SeaBattleGameTest {
     }
 
     @Test
+    void testNotifyWhenReadySuccess(){
+        game.registerPlayer("Some Name", "Some Password", applicationPlayer, true);
+        int playerNr = applicationPlayer.getPlayerNumber();
+        game.placeShipsAutomatically(playerNr);
+
+        game.notifyWhenReady(playerNr);
+        String error = applicationPlayer.getErrorMessage();
+        String expected = null;
+
+        assertEquals(expected,error, "This isn't right");
+    }
+
+    @Test
     void testFireShot(){
         game.fireShot(0, 3, 3);
         ShotType t = applicationPlayer.getLastShotPlayer();
@@ -160,7 +214,17 @@ class SeaBattleGameTest {
     }
 
     @Test
-    void testStartNewGame(){
+    void testFireShotHit(){
+        game.placeShip(0, ShipType.CRUISER, 4, 4, true);
+
+        game.fireShot(0, 4, 4);
+        ShotType t = applicationPlayer.getLastShotPlayer();
+        ShotType expected = ShotType.HIT;
+        assertEquals(expected,t, "It was a different ShotType.");
+    }
+
+    @Test
+    void testStartNewGameFail(){
         game.placeShip(0, ShipType.CRUISER, 4, 4, true);
         game.placeShip(0, ShipType.MINESWEEPER, 2, 4, true);
 
@@ -169,7 +233,15 @@ class SeaBattleGameTest {
         int actualResult = applicationPlayer.numberSquaresPlayerWithSquareState(SquareState.SHIP);
         assertEquals(expectedResult,actualResult, "There are still ships, so the board hasn't been cleared.");
     }
-    // TODO add test methods here.
-    // The methods must be annotated with annotation @Test. 
+
+    @Test
+    void testStartNewGameSuccess(){
+        game.placeShipsAutomatically(0);
+
+        game.startNewGame(0);
+        int expectedResult = 5 + 4 + 3 + 3 + 2;
+        int actualResult = applicationPlayer.numberSquaresPlayerWithSquareState(SquareState.SHIP);
+        assertEquals(expectedResult,actualResult, "There are still ships, so the board hasn't been cleared.");
+    }
 }
 
