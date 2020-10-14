@@ -55,6 +55,7 @@ public class SeaBattleGame implements ISeaBattleGame {
 
   @Override
   public void placeShip(int playerNr, ShipType shipType, int bowX, int bowY, boolean horizontal) {
+    //TODO: Check if out of bounds && if overlapping.
     if(manager.shipTypeInList(shipType) || manager.allShips.size() >= 5){
       return;
     }
@@ -89,7 +90,16 @@ public class SeaBattleGame implements ISeaBattleGame {
 
   @Override
   public void removeShip(int playerNr, int posX, int posY) {
-    throw new UnsupportedOperationException("Method removeShip() not implemented.");
+    List<Position> positions = manager.getAllPositions();
+    List<Position> deletePositions = manager.getAllPositions();
+    for (Position pos: positions) {
+      if(pos.getX() == posX && pos.getY() == posY){
+        deletePositions = manager.removeShip(pos);
+        for (Position delete: deletePositions) {
+          application.showSquarePlayer(playerNr, delete.getX(), delete.getY(), SquareState.WATER);
+        }
+      }
+    }
   }
 
   @Override

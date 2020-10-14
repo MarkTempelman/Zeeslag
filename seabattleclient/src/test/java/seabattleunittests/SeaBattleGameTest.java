@@ -122,7 +122,10 @@ class SeaBattleGameTest {
 
     @Test
     void testPlaceShip(){
+        game.registerPlayer("s", "s", applicationPlayer, true);
+
         game.placeShip(0, ShipType.CRUISER, 4, 4, true);
+
 
         int expectedResult = 3;
         int actualResult = applicationPlayer.numberSquaresPlayerWithSquareState(SquareState.SHIP);

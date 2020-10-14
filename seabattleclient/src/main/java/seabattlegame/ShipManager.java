@@ -37,15 +37,33 @@ public class ShipManager {
         return false;
     }
 
-    public List<Position> removeAllShips() {
+    public List<Position> removeShip(Position pos){
+        List<Position> positions = new ArrayList<>();
+        for (Ship ship: allShips) {
+            for (Position position : ship.getPositions()){
+                if(pos == position){
+                    positions = ship.getPositions();
+                    allShips.remove(ship);
+                    return positions;
+                }
+            }
+        }
+        return positions;
+    }
+
+    public List<Position> getAllPositions(){
         List<Position> positions = new ArrayList<>();
         for (Ship ship : allShips) {
             for (Position pos : ship.getPositions()) {
                 positions.add(pos);
             }
         }
-        allShips.clear();
         return positions;
+    }
+
+    public List<Position> removeAllShips() {
+        allShips.clear();
+        return getAllPositions();
     }
 
 }
