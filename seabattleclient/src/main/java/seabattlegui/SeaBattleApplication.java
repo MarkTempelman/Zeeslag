@@ -900,7 +900,7 @@ public class SeaBattleApplication extends Application implements ISeaBattleGUI {
                 Rectangle square = squaresOceanArea[selectedSquareX][selectedSquareY];
                 if (square.getFill().equals(Color.YELLOW)) {
                     if(game.checkIfOnSquare(selectedSquareX, selectedSquareY)){
-                        square.setFill(Color.LIGHTGRAY);
+                        square.setFill(Color.DARKGRAY);
                     }
                     else{
                         square.setFill(Color.LIGHTBLUE);

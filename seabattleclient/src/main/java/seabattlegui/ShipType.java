@@ -8,9 +8,15 @@ package seabattlegui;
  * @author Nico Kuijpers
  */
 public enum ShipType {
-    AIRCRAFTCARRIER,  // Aircraft carrier (size 5)
-    BATTLESHIP,       // Battle ship (size 4)
-    CRUISER,          // Cruister (size 3)
-    SUBMARINE,        // Submarine (size 3)
-    MINESWEEPER;      // Mine sweeper (size 2)
+    AIRCRAFTCARRIER(5),  // Aircraft carrier (size 5)
+    BATTLESHIP(4),       // Battle ship (size 4)
+    CRUISER(3),          // Cruister (size 3)
+    SUBMARINE(3),        // Submarine (size 3)
+    MINESWEEPER(2);      // Mine sweeper (size 2)
+
+    public final int length;
+
+    private ShipType(int length) {
+        this.length = length;
+    }
 }

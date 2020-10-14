@@ -57,83 +57,126 @@ public class SeaBattleGame implements ISeaBattleGame {
   public void placeShip(int playerNr, ShipType shipType, int bowX, int bowY, boolean horizontal) {
     Ship ship;
     Position pos1;
-    switch(shipType){
-      case AIRCRAFTCARRIER:
-        ship = new Ship(ShipType.AIRCRAFTCARRIER, bowX, bowY, horizontal);
-        pos1 = new Position(bowX, bowY);
-        ship.addPositions(pos1);
-        for(int i = 0; i < 5; i++){
-          if(horizontal){
-            Position pos = new Position(bowX + i, bowY);
-            ship.addPositions(pos);
-            application.showSquarePlayer(playerNr, bowX + i, bowY, SquareState.SHIP);
-          }
-          else{
-            Position pos = new Position(bowX, bowY + i);
-            ship.addPositions(pos);
-            application.showSquarePlayer(playerNr, bowX, bowY + i, SquareState.SHIP);
-          }
-
-        }
-        manager.addShip(ship);
-        break;
-      case BATTLESHIP:
-        ship = new Ship(ShipType.AIRCRAFTCARRIER, bowX, bowY, horizontal);
-        pos1 = new Position(bowX, bowY);
-        ship.addPositions(pos1);
-        for(int i = 0; i < 4; i++){
-          if(horizontal){
-            Position pos = new Position(bowX + i, bowY);
-            ship.addPositions(pos);
-            application.showSquarePlayer(playerNr, bowX + i, bowY, SquareState.SHIP);
-          }
-          else{
-            Position pos = new Position(bowX, bowY + i);
-            ship.addPositions(pos);
-            application.showSquarePlayer(playerNr, bowX, bowY + i, SquareState.SHIP);
-          }
-
-        }
-        manager.addShip(ship);
-        break;
-      case CRUISER:
-      case SUBMARINE:
-        ship = new Ship(ShipType.AIRCRAFTCARRIER, bowX, bowY, horizontal);
-        pos1 = new Position(bowX, bowY);
-        for(int i = 0; i < 3; i++){
-          if(horizontal){
-            Position pos = new Position(bowX + i, bowY);
-            ship.addPositions(pos);
-            application.showSquarePlayer(playerNr, bowX + i, bowY, SquareState.SHIP);
-          }
-          else{
-            Position pos = new Position(bowX, bowY + i);
-            ship.addPositions(pos);
-            application.showSquarePlayer(playerNr, bowX, bowY + i, SquareState.SHIP);
-          }
-
-        }
-        manager.addShip(ship);
-        break;
-      case MINESWEEPER:
-        ship = new Ship(ShipType.AIRCRAFTCARRIER, bowX, bowY, horizontal);
-        pos1 = new Position(bowX, bowY);
-        for(int i = 0; i < 2; i++){
-          if(horizontal){
-            Position pos = new Position(bowX + i, bowY);
-            ship.addPositions(pos);
-            application.showSquarePlayer(playerNr, bowX + i, bowY, SquareState.SHIP);
-          }
-          else{
-            Position pos = new Position(bowX, bowY + i);
-            ship.addPositions(pos);
-            application.showSquarePlayer(playerNr, bowX, bowY + i, SquareState.SHIP);
-          }
-        }
-        manager.addShip(ship);
-        break;
+    if(horizontal) {
+      ship = new Ship(shipType, bowX, bowY, horizontal);
+      pos1 = new Position(bowX, bowY);
+      ship.addPositions(pos1);
+      for(int i = 0; i < shipType.length; i++) {
+        Position pos = new Position(bowX + i, bowY);
+        ship.addPositions(pos);
+        application.showSquarePlayer(playerNr, bowX + i, bowY, SquareState.SHIP);
+      }
+      manager.addShip(ship);
+    } else {
+      ship = new Ship(shipType, bowX, bowY, horizontal);
+      pos1 = new Position(bowX, bowY);
+      ship.addPositions(pos1);
+      for(int i = 0; i < shipType.length; i++) {
+        Position pos = new Position(bowX + i, bowY);
+        ship.addPositions(pos);
+        application.showSquarePlayer(playerNr, bowX, bowY + i, SquareState.SHIP);
+      }
     }
   }
+
+//  @Override
+//  public void placeShip(int playerNr, ShipType shipType, int bowX, int bowY, boolean horizontal) {
+//    Ship ship;
+//    Position pos1;
+//    switch(shipType){
+//      case AIRCRAFTCARRIER:
+//        ship = new Ship(ShipType.AIRCRAFTCARRIER, bowX, bowY, horizontal);
+//        pos1 = new Position(bowX, bowY);
+//        ship.addPositions(pos1);
+//        for(int i = 0; i < 5; i++){
+//          if(horizontal){
+//            Position pos = new Position(bowX + i, bowY);
+//            ship.addPositions(pos);
+//            application.showSquarePlayer(playerNr, bowX + i, bowY, SquareState.SHIP);
+//          }
+//          else{
+//            Position pos = new Position(bowX, bowY + i);
+//            ship.addPositions(pos);
+//            application.showSquarePlayer(playerNr, bowX, bowY + i, SquareState.SHIP);
+//          }
+//
+//        }
+//        manager.addShip(ship);
+//        break;
+//      case BATTLESHIP:
+//        ship = new Ship(ShipType.BATTLESHIP, bowX, bowY, horizontal);
+//        pos1 = new Position(bowX, bowY);
+//        ship.addPositions(pos1);
+//        for(int i = 0; i < 4; i++){
+//          if(horizontal){
+//            Position pos = new Position(bowX + i, bowY);
+//            ship.addPositions(pos);
+//            application.showSquarePlayer(playerNr, bowX + i, bowY, SquareState.SHIP);
+//          }
+//          else{
+//            Position pos = new Position(bowX, bowY + i);
+//            ship.addPositions(pos);
+//            application.showSquarePlayer(playerNr, bowX, bowY + i, SquareState.SHIP);
+//          }
+//
+//        }
+//        manager.addShip(ship);
+//        break;
+//      case CRUISER:
+//        ship = new Ship(ShipType.CRUISER, bowX, bowY, horizontal);
+//        pos1 = new Position(bowX, bowY);
+//        for(int i = 0; i < 3; i++){
+//          if(horizontal){
+//            Position pos = new Position(bowX + i, bowY);
+//            ship.addPositions(pos);
+//            application.showSquarePlayer(playerNr, bowX + i, bowY, SquareState.SHIP);
+//          }
+//          else{
+//            Position pos = new Position(bowX, bowY + i);
+//            ship.addPositions(pos);
+//            application.showSquarePlayer(playerNr, bowX, bowY + i, SquareState.SHIP);
+//          }
+//
+//        }
+//        manager.addShip(ship);
+//        break;
+//      case SUBMARINE:
+//        ship = new Ship(ShipType.SUBMARINE, bowX, bowY, horizontal);
+//        pos1 = new Position(bowX, bowY);
+//        for(int i = 0; i < 3; i++){
+//          if(horizontal){
+//            Position pos = new Position(bowX + i, bowY);
+//            ship.addPositions(pos);
+//            application.showSquarePlayer(playerNr, bowX + i, bowY, SquareState.SHIP);
+//          }
+//          else{
+//            Position pos = new Position(bowX, bowY + i);
+//            ship.addPositions(pos);
+//            application.showSquarePlayer(playerNr, bowX, bowY + i, SquareState.SHIP);
+//          }
+//
+//        }
+//        manager.addShip(ship);
+//        break;
+//      case MINESWEEPER:
+//        ship = new Ship(ShipType.MINESWEEPER, bowX, bowY, horizontal);
+//        pos1 = new Position(bowX, bowY);
+//        for(int i = 0; i < 2; i++){
+//          if(horizontal){
+//            Position pos = new Position(bowX + i, bowY);
+//            ship.addPositions(pos);
+//            application.showSquarePlayer(playerNr, bowX + i, bowY, SquareState.SHIP);
+//          }
+//          else{
+//            Position pos = new Position(bowX, bowY + i);
+//            ship.addPositions(pos);
+//            application.showSquarePlayer(playerNr, bowX, bowY + i, SquareState.SHIP);
+//          }
+//        }
+//        manager.addShip(ship);
+//        break;
+//    }
+//  }
 
 
   public boolean checkIfOnSquare(int x, int y){
