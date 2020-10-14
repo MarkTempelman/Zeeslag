@@ -72,10 +72,11 @@ public class SeaBattleGame implements ISeaBattleGame {
       pos1 = new Position(bowX, bowY);
       ship.addPositions(pos1);
       for(int i = 0; i < shipType.length; i++) {
-        Position pos = new Position(bowX + i, bowY);
+        Position pos = new Position(bowX, bowY + i);
         ship.addPositions(pos);
         application.showSquarePlayer(playerNr, bowX, bowY + i, SquareState.SHIP);
       }
+      manager.addShip(ship);
     }
   }
 
