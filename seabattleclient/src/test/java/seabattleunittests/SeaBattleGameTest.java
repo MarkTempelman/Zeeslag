@@ -39,6 +39,7 @@ class SeaBattleGameTest {
         
         // Create mock Sea Battle GUI for opponent
         applicationOpponent = new MockSeaBattleApplication();
+        game.registerPlayer("s", "s", applicationPlayer, true);
     }
     
     @AfterEach
@@ -122,7 +123,7 @@ class SeaBattleGameTest {
 
     @Test
     void testPlaceShip(){
-        game.registerPlayer("s", "s", applicationPlayer, true);
+
 
         game.placeShip(0, ShipType.CRUISER, 4, 4, true);
 
