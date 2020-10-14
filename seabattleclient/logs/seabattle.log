@@ -7,3 +7,13 @@
 2020-09-28 10:40:02,512 [main] [DEBUG] seabattlegame.SeaBattleGame - Register Player Some Name - password Some Password
 2020-09-28 10:46:46,809 [main] [DEBUG] seabattlegame.SeaBattleGame - Register Player null - password password
 2020-09-28 10:46:46,815 [main] [DEBUG] seabattlegame.SeaBattleGame - Register Player Some Name - password Some Password
+2020-10-13 13:08:01,965 [main] [DEBUG] seabattlegame.SeaBattleGame - Register Player name - password password
+2020-10-13 13:08:01,986 [main] [DEBUG] seabattlegame.SeaBattleGame - Register Player Some Name - password Some Password
+2020-10-13 13:08:01,996 [main] [DEBUG] seabattlegame.SeaBattleGame - Register Player null - password password
+2020-10-13 13:08:02,011 [main] [DEBUG] seabattlegame.SeaBattleGame - Register Player Some Name - password Some Password
+2020-10-13 13:08:02,030 [main] [DEBUG] seabattlegame.SeaBattleGame - Register Player name - password 
+2020-10-13 13:11:27,123 [main] [DEBUG] seabattlegame.SeaBattleGame - Register Player name - password password
+2020-10-13 13:11:27,156 [main] [DEBUG] seabattlegame.SeaBattleGame - Register Player Some Name - password Some Password
+2020-10-13 13:11:27,164 [main] [DEBUG] seabattlegame.SeaBattleGame - Register Player null - password password
+2020-10-13 13:11:27,180 [main] [DEBUG] seabattlegame.SeaBattleGame - Register Player Some Name - password Some Password
+2020-10-13 13:11:27,195 [main] [DEBUG] seabattlegame.SeaBattleGame - Register Player name - password 

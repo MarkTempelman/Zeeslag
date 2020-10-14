@@ -117,4 +117,6 @@ public interface ISeaBattleGame {
      * @param playerNr identification of player who starts a new game
      */
     public void startNewGame(int playerNr);
+
+    public boolean checkIfOnSquare(int x, int y);
 }
