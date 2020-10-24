@@ -62,8 +62,9 @@ public class ShipManager {
     }
 
     public List<Position> removeAllShips() {
+        List<Position> allPositions = getAllPositions();
         allShips.clear();
-        return getAllPositions();
+        return allPositions;
     }
 
 }
