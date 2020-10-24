@@ -61,27 +61,49 @@ public class SeaBattleGame implements ISeaBattleGame {
     }
     Ship ship;
     Position pos1;
+    ship = new Ship(shipType, bowX, bowY, horizontal);
+    pos1 = new Position(bowX, bowY);
+    ship.addPositions(pos1);
     if(horizontal) {
-      ship = new Ship(shipType, bowX, bowY, horizontal);
-      pos1 = new Position(bowX, bowY);
-      ship.addPositions(pos1);
       for(int i = 0; i < shipType.length; i++) {
         Position pos = new Position(bowX + i, bowY);
         ship.addPositions(pos);
-        application.showSquarePlayer(playerNr, bowX + i, bowY, SquareState.SHIP);
       }
-      manager.addShip(ship);
+      if(canShipBePlaced(ship)){
+        for (Position position : ship.getPositions()) {
+          application.showSquarePlayer(playerNr, position.getX(), position.getY(), SquareState.SHIP);
+        }
+        manager.addShip(ship);
+      } else {
+        application.showErrorMessage(playerNr, "this ship can't be placed here");
+      }
     } else {
-      ship = new Ship(shipType, bowX, bowY, horizontal);
-      pos1 = new Position(bowX, bowY);
-      ship.addPositions(pos1);
       for(int i = 0; i < shipType.length; i++) {
         Position pos = new Position(bowX, bowY + i);
         ship.addPositions(pos);
-        application.showSquarePlayer(playerNr, bowX, bowY + i, SquareState.SHIP);
       }
-      manager.addShip(ship);
+      if(canShipBePlaced(ship)){
+        for (Position position : ship.getPositions()) {
+          application.showSquarePlayer(playerNr, position.getX(), position.getY(), SquareState.SHIP);
+        }
+        manager.addShip(ship);
+      } else {
+        application.showErrorMessage(playerNr, "this ship can't be placed here");
+      }
     }
+  }
+
+  public boolean canShipBePlaced(Ship ship){
+    for (Position position : ship.getPositions()) {
+      if(checkIfOutOfBounds(position.getX(), position.getY()) || checkIfOnSquare(position.getX(), position.getY())){
+        return false;
+      }
+    }
+    return true;
+  }
+
+  public boolean checkIfOutOfBounds(int x, int y){
+    return x > 9 || x < 0 || y > 9 || y < 0;
   }
 
   public boolean checkIfOnSquare(int x, int y){

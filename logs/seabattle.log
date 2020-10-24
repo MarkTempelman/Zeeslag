@@ -155,3 +155,10 @@
 2020-10-24 11:24:11,076 [JavaFX Application Thread] [INFO ] seabattlegui.SeaBattleApplication - Seabattle started
 2020-10-24 11:24:16,730 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for test - Player test registered
 2020-10-24 11:24:21,203 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for test - Select square in test's grid to place ship
+2020-10-24 11:46:34,551 [JavaFX Application Thread] [INFO ] seabattlegui.SeaBattleApplication - Seabattle started
+2020-10-24 11:46:38,857 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for test - Player test registered
+2020-10-24 11:46:44,919 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for test - this ship can't be placed here
+2020-10-24 11:46:49,740 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for test - this ship can't be placed here
+2020-10-24 11:46:54,220 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for test - this ship can't be placed here
+2020-10-24 11:47:01,026 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for test - this ship can't be placed here
+2020-10-24 11:47:10,278 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for test - this ship can't be placed here
