@@ -23,7 +23,7 @@ import java.util.List;
  * @author Nico Kuijpers
  */
 public class SeaBattleGame implements ISeaBattleGame {
-
+  //TODO: refactor so SeaBattleGame can keep track of two players
   private static final Logger log = LoggerFactory.getLogger(SeaBattleGame.class);
   ISeaBattleGUI application;
   boolean singlePlayerMode;
@@ -55,7 +55,6 @@ public class SeaBattleGame implements ISeaBattleGame {
 
   @Override
   public void placeShip(int playerNr, ShipType shipType, int bowX, int bowY, boolean horizontal) {
-    //TODO: Check if out of bounds && if overlapping.
     if(manager.shipTypeInList(shipType) || manager.allShips.size() >= 5){
       return;
     }
@@ -134,8 +133,13 @@ public class SeaBattleGame implements ISeaBattleGame {
 
   @Override
   public void notifyWhenReady(int playerNr) {
-    throw new UnsupportedOperationException("Method notifyWhenReady() not implemented.");
-    //is ie echt ready???? zo niet: seabtalleapplication.showErrorMessage();
+    if(manager.allShips.size() == 5){
+      if(singlePlayerMode){
+        application.notifyStartGame(playerNr);
+      }
+    } else {
+      application.showErrorMessage(playerNr, "Not all ships have been placed!");
+    }
   }
 
   @Override
