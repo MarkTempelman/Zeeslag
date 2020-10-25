@@ -118,5 +118,5 @@ public interface ISeaBattleGame {
      */
     public void startNewGame(int playerNr);
 
-    public boolean checkIfOnSquare(int x, int y);
+    public boolean checkIfOnSquare(int x, int y, int playerNr);
 }

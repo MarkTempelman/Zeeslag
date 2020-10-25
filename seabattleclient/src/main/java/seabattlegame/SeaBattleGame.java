@@ -15,6 +15,7 @@ import seabattlegui.ISeaBattleGUI;
 import seabattlegui.ShipType;
 import seabattlegui.SquareState;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,10 +26,10 @@ import java.util.List;
 public class SeaBattleGame implements ISeaBattleGame {
   //TODO: refactor so SeaBattleGame can keep track of two players
   private static final Logger log = LoggerFactory.getLogger(SeaBattleGame.class);
-  ISeaBattleGUI application;
+  ArrayList<ISeaBattleGUI> applications = new ArrayList<ISeaBattleGUI>();
   boolean singlePlayerMode;
-  Player player;
-  ShipManager manager = new ShipManager();
+  ArrayList<Player> players = new ArrayList<Player>();
+  ArrayList<ShipManager> managers = new ArrayList<ShipManager>();
 
   @Override
   public void registerPlayer(String name, String password, ISeaBattleGUI application, boolean singlePlayerMode ) {
@@ -38,10 +39,14 @@ public class SeaBattleGame implements ISeaBattleGame {
     {
       throw new IllegalArgumentException();
     }
-    this.application = application;
-    this.singlePlayerMode = singlePlayerMode;
-    player = new Player(name, password, 0);
-    this.application.setPlayerNumber(this.player.getPlayerNumber(), this.player.getName());
+    int applicationSize = applications.size();
+    if(applicationSize < 2){
+      this.applications.add(application);
+      this.singlePlayerMode = singlePlayerMode;
+      players.add(new Player(name, password, applicationSize));
+      applications.get(applicationSize).setPlayerNumber(players.get(applicationSize).getPlayerNumber(), players.get(applicationSize).getName());
+      managers.add(new ShipManager());
+    }
   }
 
   @Override
@@ -55,46 +60,46 @@ public class SeaBattleGame implements ISeaBattleGame {
 
   @Override
   public void placeShip(int playerNr, ShipType shipType, int bowX, int bowY, boolean horizontal) {
+    ShipManager manager = managers.get(playerNr);
     if(manager.shipTypeInList(shipType) || manager.allShips.size() >= 5){
       return;
     }
-    Ship ship;
-    Position pos1;
-    ship = new Ship(shipType, bowX, bowY, horizontal);
-    pos1 = new Position(bowX, bowY);
+    tryPlaceShip(playerNr, shipType, bowX, bowY, horizontal);
+  }
+
+  private void tryPlaceShip(int playerNr, ShipType shipType, int bowX, int bowY, boolean horizontal){
+    Ship ship = new Ship(shipType, bowX, bowY, horizontal);
+    Position pos1 = new Position(bowX, bowY);
     ship.addPositions(pos1);
     if(horizontal) {
       for(int i = 0; i < shipType.length; i++) {
         Position pos = new Position(bowX + i, bowY);
         ship.addPositions(pos);
       }
-      if(canShipBePlaced(ship)){
-        for (Position position : ship.getPositions()) {
-          application.showSquarePlayer(playerNr, position.getX(), position.getY(), SquareState.SHIP);
-        }
-        manager.addShip(ship);
-      } else {
-        application.showErrorMessage(playerNr, "this ship can't be placed here");
-      }
+      placeShipIfPossible(playerNr, ship);
     } else {
       for(int i = 0; i < shipType.length; i++) {
         Position pos = new Position(bowX, bowY + i);
         ship.addPositions(pos);
       }
-      if(canShipBePlaced(ship)){
-        for (Position position : ship.getPositions()) {
-          application.showSquarePlayer(playerNr, position.getX(), position.getY(), SquareState.SHIP);
-        }
-        manager.addShip(ship);
-      } else {
-        application.showErrorMessage(playerNr, "this ship can't be placed here");
-      }
+      placeShipIfPossible(playerNr, ship);
     }
   }
 
-  public boolean canShipBePlaced(Ship ship){
+  private void placeShipIfPossible(int playerNr, Ship ship){
+    if(canShipBePlaced(ship, playerNr)){
+      for (Position position : ship.getPositions()) {
+        applications.get(playerNr).showSquarePlayer(playerNr, position.getX(), position.getY(), SquareState.SHIP);
+      }
+      managers.get(playerNr).addShip(ship);
+    } else {
+      applications.get(playerNr).showErrorMessage(playerNr, "this ship can't be placed here");
+    }
+  }
+
+  public boolean canShipBePlaced(Ship ship, int playerNr){
     for (Position position : ship.getPositions()) {
-      if(checkIfOutOfBounds(position.getX(), position.getY()) || checkIfOnSquare(position.getX(), position.getY())){
+      if(checkIfOutOfBounds(position.getX(), position.getY()) || checkIfOnSquare(position.getX(), position.getY(), playerNr)){
         return false;
       }
     }
@@ -105,40 +110,41 @@ public class SeaBattleGame implements ISeaBattleGame {
     return x > 9 || x < 0 || y > 9 || y < 0;
   }
 
-  public boolean checkIfOnSquare(int x, int y){
-    return manager.checkIfOverlap(x, y);
+  public boolean checkIfOnSquare(int x, int y, int playerNr){
+    return managers.get(playerNr).checkIfOverlap(x, y);
   }
 
   @Override
   public void removeShip(int playerNr, int posX, int posY) {
-    List<Position> positions = manager.getAllPositions();
-    List<Position> deletePositions = manager.getAllPositions();
+    List<Position> positions = managers.get(playerNr).getAllPositions();
+    List<Position> deletePositions = managers.get(playerNr).getAllPositions();
     for (Position pos: positions) {
       if(pos.getX() == posX && pos.getY() == posY){
-        deletePositions = manager.removeShip(pos);
+        deletePositions = managers.get(playerNr).removeShip(pos);
         for (Position delete: deletePositions) {
-          application.showSquarePlayer(playerNr, delete.getX(), delete.getY(), SquareState.WATER);
+          applications.get(playerNr).showSquarePlayer(playerNr, delete.getX(), delete.getY(), SquareState.WATER);
         }
       }
     }
+
   }
 
   @Override
   public void removeAllShips(int playerNr) {
-    List<Position> positions = manager.removeAllShips();
+    List<Position> positions = managers.get(playerNr).removeAllShips();
     for (Position pos : positions) {
-      application.showSquarePlayer(playerNr, pos.getX(), pos.getY(), SquareState.WATER);
+      applications.get(playerNr).showSquarePlayer(playerNr, pos.getX(), pos.getY(), SquareState.WATER);
     }
   }
 
   @Override
   public void notifyWhenReady(int playerNr) {
-    if(manager.allShips.size() == 5){
+    if(managers.get(playerNr).allShips.size() == 5){
       if(singlePlayerMode){
-        application.notifyStartGame(playerNr);
+        applications.get(playerNr).notifyStartGame(playerNr);
       }
     } else {
-      application.showErrorMessage(playerNr, "Not all ships have been placed!");
+      applications.get(playerNr).showErrorMessage(playerNr, "Not all ships have been placed!");
     }
   }
 
