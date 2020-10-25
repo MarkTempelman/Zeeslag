@@ -156,17 +156,16 @@ public class SeaBattleGame implements ISeaBattleGame {
   public void fireShot(int playerNr, int posX, int posY) {
     ShotType shotType;
     int opponentNumber = getOpponentNumber(playerNr);
-    if(managers.get(opponentNumber).tryHitShip(posX, posY)){
-      shotType = ShotType.HIT;
-    }
-    else{
-      shotType = ShotType.MISSED;
-    }
+    shotType = managers.get(opponentNumber).receiveShot(posX, posY);
+
     applications.get(playerNr).playerFiresShot(playerNr, shotType);
     applications.get(opponentNumber).opponentFiresShot(opponentNumber, shotType);
 
     applications.get(playerNr).showSquareOpponent(playerNr,posX, posY, shotTypeToSquareState(shotType));
     applications.get(opponentNumber).showSquarePlayer(opponentNumber, posX, posY, shotTypeToSquareState(shotType));
+    if(singlePlayerMode && playerNr == 0){
+      AI.aiTurn();
+    }
   }
 
   private int getOpponentNumber(int playerNr){

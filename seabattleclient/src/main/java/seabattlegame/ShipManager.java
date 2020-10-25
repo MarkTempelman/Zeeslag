@@ -3,6 +3,7 @@ package seabattlegame;
 import Models.Position;
 import Models.Ship;
 import seabattlegui.ShipType;
+import seabattlegui.ShotType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,17 +30,40 @@ public class ShipManager {
         return false;
     }
 
-    public boolean tryHitShip(int x, int y){
-        Position pos = new Position(x, y);
+    private Ship tryGetShipAtPos(Position pos){
         for(Ship ship : allShips){
             for(Position position : ship.getPositions()){
                 if(position.getX() == pos.getX() && position.getY() == pos.getY()){
-                    ship.addHitPosition(pos);
-                    return true;
+                    return ship;
                 }
             }
         }
-        return false;
+        return null;
+    }
+
+    public ShotType receiveShot(int x, int y){
+        Position pos = new Position(x, y);
+        Ship ship = tryGetShipAtPos(pos);
+        if(ship == null){
+            return ShotType.MISSED;
+        }
+        ship.addHitPosition(pos);
+        if(ship.getHitPositions().size() != ship.getPositions().size()){
+            return ShotType.HIT;
+        }
+        if(areAllShipsSunk()){
+            return ShotType.ALLSUNK;
+        }
+        return ShotType.SUNK;
+    }
+
+    private boolean areAllShipsSunk(){
+        for (Ship ship : allShips){
+            if(ship.getPositions().size() != ship.getHitPositions().size()){
+                return false;
+            }
+        }
+        return true;
     }
 
     public boolean shipTypeInList(ShipType type){
