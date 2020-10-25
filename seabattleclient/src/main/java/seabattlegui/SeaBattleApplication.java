@@ -488,7 +488,12 @@ public class SeaBattleApplication extends Application implements ISeaBattleGUI {
         // TODO: IMPLEMENT CLASS SeaBattleGame.
         game = new SeaBattleGame();
     }
-    
+
+    @Override
+    public int getPlayerNumber(){
+        return playerNr;
+    }
+
     /**
      * Set player number.
      * @param playerNr identification of player

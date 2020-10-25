@@ -179,3 +179,24 @@
 2020-10-25 10:38:19,137 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for test - Player test registered
 2020-10-25 10:40:04,444 [JavaFX Application Thread] [INFO ] seabattlegui.SeaBattleApplication - Seabattle started
 2020-10-25 10:40:08,997 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for test - Player test registered
+2020-10-25 11:34:29,356 [JavaFX Application Thread] [INFO ] seabattlegui.SeaBattleApplication - Seabattle started
+2020-10-25 11:34:34,447 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for test - Player test registered
+2020-10-25 11:34:39,517 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for test - Start playing by selecting a square in Opponent's grid
+2020-10-25 11:34:45,038 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for test - Wait till Opponent has fired a shot
+2020-10-25 11:34:59,904 [JavaFX Application Thread] [INFO ] seabattlegui.SeaBattleApplication - Seabattle started
+2020-10-25 11:35:04,401 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for test - Player test registered
+2020-10-25 11:35:08,091 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for test - Start playing by selecting a square in Opponent's grid
+2020-10-25 11:37:03,411 [JavaFX Application Thread] [INFO ] seabattlegui.SeaBattleApplication - Seabattle started
+2020-10-25 11:37:08,738 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for test - Player test registered
+2020-10-25 11:37:24,241 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for test - Start playing by selecting a square in Opponent's grid
+2020-10-25 11:38:32,168 [JavaFX Application Thread] [INFO ] seabattlegui.SeaBattleApplication - Seabattle started
+2020-10-25 11:38:36,388 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for t - Player t registered
+2020-10-25 11:38:39,173 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for t - Start playing by selecting a square in Opponent's grid
+2020-10-25 11:54:31,247 [JavaFX Application Thread] [INFO ] seabattlegui.SeaBattleApplication - Seabattle started
+2020-10-25 11:54:38,720 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for test - Player test registered
+2020-10-25 11:54:53,872 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for test - Start playing by selecting a square in Opponent's grid
+2020-10-25 11:56:20,241 [JavaFX Application Thread] [INFO ] seabattlegui.SeaBattleApplication - Seabattle started
+2020-10-25 11:56:24,609 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for test - Player test registered
+2020-10-25 11:56:37,095 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for test - Not all ships have been placed!
+2020-10-25 11:56:39,489 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for test - Select square in test's grid to place ships
+2020-10-25 11:56:46,602 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for test - Start playing by selecting a square in Opponent's grid

@@ -10,9 +10,11 @@ import Models.Ship;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import seabattleai.IStrategy;
+import seabattleai.SeaBattleAI;
 import seabattleai.SimpleStrategy;
 import seabattlegui.ISeaBattleGUI;
 import seabattlegui.ShipType;
+import seabattlegui.ShotType;
 import seabattlegui.SquareState;
 
 import java.util.ArrayList;
@@ -30,6 +32,7 @@ public class SeaBattleGame implements ISeaBattleGame {
   boolean singlePlayerMode;
   ArrayList<Player> players = new ArrayList<Player>();
   ArrayList<ShipManager> managers = new ArrayList<ShipManager>();
+  SeaBattleAI AI = new SeaBattleAI(this);
 
   @Override
   public void registerPlayer(String name, String password, ISeaBattleGUI application, boolean singlePlayerMode ) {
@@ -142,6 +145,7 @@ public class SeaBattleGame implements ISeaBattleGame {
     if(managers.get(playerNr).allShips.size() == 5){
       if(singlePlayerMode){
         applications.get(playerNr).notifyStartGame(playerNr);
+        AI.SetupAI();
       }
     } else {
       applications.get(playerNr).showErrorMessage(playerNr, "Not all ships have been placed!");
@@ -150,7 +154,39 @@ public class SeaBattleGame implements ISeaBattleGame {
 
   @Override
   public void fireShot(int playerNr, int posX, int posY) {
-    throw new UnsupportedOperationException("Method fireShot() not implemented.");
+    ShotType shotType;
+    int opponentNumber = getOpponentNumber(playerNr);
+    if(managers.get(opponentNumber).tryHitShip(posX, posY)){
+      shotType = ShotType.HIT;
+    }
+    else{
+      shotType = ShotType.MISSED;
+    }
+    applications.get(playerNr).playerFiresShot(playerNr, shotType);
+    applications.get(opponentNumber).opponentFiresShot(opponentNumber, shotType);
+
+    applications.get(playerNr).showSquareOpponent(playerNr,posX, posY, shotTypeToSquareState(shotType));
+    applications.get(opponentNumber).showSquarePlayer(opponentNumber, posX, posY, shotTypeToSquareState(shotType));
+  }
+
+  private int getOpponentNumber(int playerNr){
+    if(playerNr == 0){
+      return 1;
+    }
+    return 0;
+  }
+
+  private SquareState shotTypeToSquareState(ShotType shotType){
+    switch(shotType){
+      case MISSED:
+        return SquareState.SHOTMISSED;
+      case HIT:
+        return SquareState.SHOTHIT;
+      case SUNK:
+      case ALLSUNK:
+        return SquareState.SHIPSUNK;
+    }
+    return SquareState.SHOTMISSED;
   }
 
   @Override

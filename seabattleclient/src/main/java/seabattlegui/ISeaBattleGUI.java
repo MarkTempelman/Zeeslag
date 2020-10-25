@@ -81,4 +81,6 @@ public interface ISeaBattleGUI {
      * @param errorMessage error message
      */
     public void showErrorMessage(int playerNr, String errorMessage);
+
+    public int getPlayerNumber();
 }

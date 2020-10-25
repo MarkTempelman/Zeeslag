@@ -17,10 +17,24 @@ public class ShipManager {
     public void addShip(Ship ship) {
         this.allShips.add(ship);
     }
+
     public boolean checkIfOverlap(int x, int y){
         for (Ship ship: allShips) {
             for (Position pos: ship.getPositions()) {
                 if(pos.getX() == x && pos.getY() == y){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean tryHitShip(int x, int y){
+        Position pos = new Position(x, y);
+        for(Ship ship : allShips){
+            for(Position position : ship.getPositions()){
+                if(position.getX() == pos.getX() && position.getY() == pos.getY()){
+                    ship.addHitPosition(pos);
                     return true;
                 }
             }

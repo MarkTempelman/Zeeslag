@@ -57,6 +57,26 @@ public class Ship {
     }
 
     public void addPositions(Position pos) {
+        for(Position position : positions){
+            if(position.getX() == pos.getX() && position.getY() == pos.getY()){
+                return;
+            }
+        }
         this.positions.add(pos);
+    }
+
+    private List<Position> hitPositions = new ArrayList<>();
+
+    public List<Position> getHitPositions(){
+        return hitPositions;
+    }
+
+    public void addHitPosition(Position pos){
+        for(Position position : hitPositions){
+            if(position.getX() == pos.getX() && position.getY() == pos.getY()){
+                return;
+            }
+        }
+        hitPositions.add(pos);
     }
 }
