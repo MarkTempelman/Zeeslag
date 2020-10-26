@@ -12,10 +12,7 @@ import org.slf4j.LoggerFactory;
 import seabattleai.IStrategy;
 import seabattleai.SeaBattleAI;
 import seabattleai.SimpleStrategy;
-import seabattlegui.ISeaBattleGUI;
-import seabattlegui.ShipType;
-import seabattlegui.ShotType;
-import seabattlegui.SquareState;
+import seabattlegui.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +23,6 @@ import java.util.List;
  * @author Nico Kuijpers
  */
 public class SeaBattleGame implements ISeaBattleGame {
-  //TODO: refactor so SeaBattleGame can keep track of two players
   private static final Logger log = LoggerFactory.getLogger(SeaBattleGame.class);
   ArrayList<ISeaBattleGUI> applications = new ArrayList<ISeaBattleGUI>();
   boolean singlePlayerMode;
@@ -190,6 +186,24 @@ public class SeaBattleGame implements ISeaBattleGame {
 
   @Override
   public void startNewGame(int playerNr) {
-    throw new UnsupportedOperationException("Method startNewGame() not implemented.");
+    clearMap(playerNr);
+    if(singlePlayerMode){
+      applications = new ArrayList<>();
+      players = new ArrayList<>();
+      managers = new ArrayList<>();
+      return;
+    }
+    applications.remove(playerNr);
+    players.remove(playerNr);
+    managers.remove(playerNr);
+  }
+
+  private void clearMap(int playerNr){
+    for (int x = 0; x < 10; x++) {
+      for (int y = 0; y < 10; y++) {
+        applications.get(playerNr).showSquarePlayer(playerNr, x, y, SquareState.WATER);
+        applications.get(playerNr).showSquareOpponent(playerNr, x, y, SquareState.WATER);
+      }
+    }
   }
 }
