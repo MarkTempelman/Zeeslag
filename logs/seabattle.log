@@ -211,3 +211,6 @@
 2020-10-25 12:23:06,456 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for test - Ship of Opponent is sunk
 2020-10-25 12:23:08,338 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for test - Winner: test.
 Press Start new game to continue
+2020-10-26 09:14:58,798 [JavaFX Application Thread] [INFO ] seabattlegui.SeaBattleApplication - Seabattle started
+2020-10-26 09:15:53,479 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for test - Player test registered
+2020-10-26 09:16:00,900 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for test - this ship can't be placed here
