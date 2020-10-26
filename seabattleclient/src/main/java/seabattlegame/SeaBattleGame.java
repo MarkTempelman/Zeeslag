@@ -38,11 +38,7 @@ public class SeaBattleGame implements ISeaBattleGame {
   public void registerPlayer(String name, String password, ISeaBattleGUI application, boolean singlePlayerMode ) {
     //TODO: get player from Server. And check if name is unique, check if there are 2 players.
     //log.debug("Register Player {} - password {}", name, password);
-<<<<<<< Updated upstream
     if(name == null || password == null || name == "" || password =="")
-=======
-    if(name == null || password == null || name == "" || password == "")
->>>>>>> Stashed changes
     {
       throw new IllegalArgumentException("Username is null");
     }
