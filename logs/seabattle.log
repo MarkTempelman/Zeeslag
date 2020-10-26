@@ -211,6 +211,15 @@
 2020-10-25 12:23:06,456 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for test - Ship of Opponent is sunk
 2020-10-25 12:23:08,338 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for test - Winner: test.
 Press Start new game to continue
+<<<<<<< Updated upstream
 2020-10-26 09:14:58,798 [JavaFX Application Thread] [INFO ] seabattlegui.SeaBattleApplication - Seabattle started
 2020-10-26 09:15:53,479 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for test - Player test registered
 2020-10-26 09:16:00,900 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for test - this ship can't be placed here
+=======
+2020-10-26 09:14:59,405 [JavaFX Application Thread] [INFO ] seabattlegui.SeaBattleApplication - Seabattle started
+2020-10-26 09:15:02,821 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for aa - Player aa registered
+2020-10-26 09:15:07,518 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for aa - this ship can't be placed here
+2020-10-26 09:15:14,252 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for aa - this ship can't be placed here
+2020-10-26 09:15:49,196 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for aa - this ship can't be placed here
+2020-10-26 09:15:52,659 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for aa - this ship can't be placed here
+>>>>>>> Stashed changes

@@ -57,7 +57,7 @@ class SeaBattleGameTest {
 
 
         // Register player with parameter name null in single-player mode
-        String name = null;
+        String name = "";
         String password = "password";
         boolean singlePlayerMode = true;
 
