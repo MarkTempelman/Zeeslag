@@ -40,7 +40,7 @@ public class SeaBattleGame implements ISeaBattleGame {
     //log.debug("Register Player {} - password {}", name, password);
     if(name == null || password == null || name == "" || password =="")
     {
-      throw new IllegalArgumentException("Username is null");
+      throw new IllegalArgumentException("Username or Password is null");
     }
     int applicationSize = applications.size();
     if(applicationSize < 2){
