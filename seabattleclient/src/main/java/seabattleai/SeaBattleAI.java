@@ -36,6 +36,7 @@ public class SeaBattleAI {
         if(duplicate){
             aiTurn();
         } else {
+            previousShots.add(pos);
             game.fireShot(playerNr, pos.getX(), pos.getY());
         }
     }
