@@ -4,8 +4,8 @@
 package seabattleunittests;
 
 import seabattlegui.ISeaBattleGUI;
-import seabattlegui.ShotType;
-import seabattlegui.SquareState;
+import seabattleshared.ShotType;
+import seabattleshared.SquareState;
 
 /**
  * Mock Sea Battle application to support unit testing of the Sea Battle game.

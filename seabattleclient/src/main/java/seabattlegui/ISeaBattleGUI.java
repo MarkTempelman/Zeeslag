@@ -3,6 +3,9 @@
  */
 package seabattlegui;
 
+import seabattleshared.ShotType;
+import seabattleshared.SquareState;
+
 /**
  * Interface provided by the graphical user interface of the sea battle game.
  * @author Nico Kuijpers

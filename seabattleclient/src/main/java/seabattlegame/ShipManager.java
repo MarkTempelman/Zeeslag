@@ -2,8 +2,8 @@ package seabattlegame;
 
 import Models.Position;
 import Models.Ship;
-import seabattlegui.ShipType;
-import seabattlegui.ShotType;
+import seabattleshared.ShipType;
+import seabattleshared.ShotType;
 
 import java.util.ArrayList;
 import java.util.List;

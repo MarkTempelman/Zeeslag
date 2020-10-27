@@ -1,8 +1,8 @@
 package seabattleai;
 
 import seabattlegui.ISeaBattleGUI;
-import seabattlegui.ShotType;
-import seabattlegui.SquareState;
+import seabattleshared.ShotType;
+import seabattleshared.SquareState;
 
 public class AISeaBattleApplication implements ISeaBattleGUI {
 

@@ -4,7 +4,7 @@
 package seabattlegame;
 
 import seabattlegui.ISeaBattleGUI;
-import seabattlegui.ShipType;
+import seabattleshared.ShipType;
 
 
 /**

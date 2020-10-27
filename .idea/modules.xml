@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/SeaBattleStart.iml" filepath="$PROJECT_DIR$/SeaBattleStart.iml" />
       <module fileurl="file://$PROJECT_DIR$/seabattleclient/seabattleclient.iml" filepath="$PROJECT_DIR$/seabattleclient/seabattleclient.iml" />
       <module fileurl="file://$PROJECT_DIR$/seabattleserver/seabattleserver.iml" filepath="$PROJECT_DIR$/seabattleserver/seabattleserver.iml" />
+      <module fileurl="file://$PROJECT_DIR$/seabattleshared/seabattleshared.iml" filepath="$PROJECT_DIR$/seabattleshared/seabattleshared.iml" />
     </modules>
   </component>
 </project>

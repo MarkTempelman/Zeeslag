@@ -13,6 +13,9 @@ import seabattleai.IStrategy;
 import seabattleai.SeaBattleAI;
 import seabattleai.SimpleStrategy;
 import seabattlegui.*;
+import seabattleshared.ShipType;
+import seabattleshared.ShotType;
+import seabattleshared.SquareState;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,16 +36,6 @@ public class SeaBattleGame implements ISeaBattleGame {
 
   @Override
   public void registerPlayer(String name, String password, ISeaBattleGUI application, boolean singlePlayerMode ){
-    if(singlePlayerMode){
-      registerPlayerSingleplayer(name, password, application, singlePlayerMode);
-    }
-    else{
-      registerPlayerMultiplayer();
-    }
-
-  }
-
-  private void registerPlayerSingleplayer(String name, String password, ISeaBattleGUI application, boolean singlePlayerMode){
     if(name == null || password == null || name == "" || password =="")
     {
       throw new IllegalArgumentException("Username or Password is null");
@@ -50,6 +43,15 @@ public class SeaBattleGame implements ISeaBattleGame {
     if(userLogin(name, password).contains("NOT_FOUND")){
       throw new IllegalArgumentException("Username already exists.");
     }
+    if(singlePlayerMode){
+      registerPlayerSingleplayer(name, password, application, singlePlayerMode);
+    }
+    else{
+      registerPlayerMultiplayer(name);
+    }
+  }
+
+  private void registerPlayerSingleplayer(String name, String password, ISeaBattleGUI application, boolean singlePlayerMode){
     int applicationSize = applications.size();
     if(applicationSize < 2){
       this.applications.add(application);
@@ -59,7 +61,7 @@ public class SeaBattleGame implements ISeaBattleGame {
       managers.add(new ShipManager());
     }
   }
-  private void registerPlayerMultiplayer(){
+  private void registerPlayerMultiplayer(String name){
 
   }
 

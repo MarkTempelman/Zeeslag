@@ -1,7 +1,7 @@
 /*
  * Sea Battle Start project.
  */
-package seabattlegui;
+package seabattleshared;
 
 /**
  * Indicate the result of a shot.

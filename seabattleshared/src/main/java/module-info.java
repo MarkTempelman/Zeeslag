@@ -1,0 +1,3 @@
+module seabattleshared {
+    exports seabattleshared;
+}

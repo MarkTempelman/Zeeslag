@@ -8,9 +8,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import seabattlegame.ISeaBattleGame;
 import seabattlegame.SeaBattleGame;
-import seabattlegui.ShipType;
-import seabattlegui.ShotType;
-import seabattlegui.SquareState;
+import seabattleshared.ShipType;
+import seabattleshared.ShotType;
+import seabattleshared.SquareState;
 
 import static org.junit.jupiter.api.Assertions.*;
 

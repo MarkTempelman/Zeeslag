@@ -28,5 +28,6 @@
     <orderEntry type="library" scope="TEST" name="Maven: org.junit.platform:junit-platform-engine:1.3.2" level="project" />
     <orderEntry type="module" module-name="seabattleserver" />
     <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.8.5" level="project" />
+    <orderEntry type="module" module-name="seabattleshared" />
   </component>
 </module>
