@@ -223,3 +223,41 @@ Press Start new game to continue
 2020-10-26 09:15:49,196 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for aa - this ship can't be placed here
 2020-10-26 09:15:52,659 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for aa - this ship can't be placed here
 >>>>>>> Stashed changes
+2020-10-26 13:17:03,335 [JavaFX Application Thread] [INFO ] seabattlegui.SeaBattleApplication - Seabattle started
+2020-10-26 13:32:36,932 [JavaFX Application Thread] [INFO ] seabattlegui.SeaBattleApplication - Seabattle started
+2020-10-26 13:32:45,789 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for hallo - Player hallo registered
+2020-10-26 13:33:27,055 [JavaFX Application Thread] [INFO ] seabattlegui.SeaBattleApplication - Seabattle started
+2020-10-26 13:33:29,630 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for aa - Player aa registered
+2020-10-26 13:54:35,014 [JavaFX Application Thread] [INFO ] seabattlegui.SeaBattleApplication - Seabattle started
+2020-10-26 13:54:38,350 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for aa - Player aa registered
+2020-10-26 14:02:50,658 [JavaFX Application Thread] [INFO ] seabattlegui.SeaBattleApplication - Seabattle started
+2020-10-26 14:02:53,103 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for aa - Player aa registered
+2020-10-26 14:03:58,880 [JavaFX Application Thread] [INFO ] seabattlegui.SeaBattleApplication - Seabattle started
+2020-10-26 14:04:15,335 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for aaa - Player aaa registered
+2020-10-26 14:05:12,835 [JavaFX Application Thread] [INFO ] seabattlegui.SeaBattleApplication - Seabattle started
+2020-10-26 14:05:17,199 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for aaaa - Player aaaa registered
+2020-10-26 14:15:04,340 [JavaFX Application Thread] [INFO ] seabattlegui.SeaBattleApplication - Seabattle started
+2020-10-26 14:15:07,360 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for aa - Player aa registered
+2020-10-26 14:19:56,400 [JavaFX Application Thread] [INFO ] seabattlegui.SeaBattleApplication - Seabattle started
+2020-10-26 14:19:59,016 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for aa - Player aa registered
+2020-10-26 14:35:59,770 [JavaFX Application Thread] [INFO ] seabattlegui.SeaBattleApplication - Seabattle started
+2020-10-26 14:36:08,009 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for aa - Player aa registered
+2020-10-26 14:36:46,002 [JavaFX Application Thread] [INFO ] seabattlegui.SeaBattleApplication - Seabattle started
+2020-10-26 14:36:49,753 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for aaa - Player aaa registered
+2020-10-26 14:37:55,885 [JavaFX Application Thread] [INFO ] seabattlegui.SeaBattleApplication - Seabattle started
+2020-10-26 14:38:03,444 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for aa - Player aa registered
+2020-10-26 14:41:46,695 [JavaFX Application Thread] [INFO ] seabattlegui.SeaBattleApplication - Seabattle started
+2020-10-26 14:41:54,201 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for aa - Player aa registered
+2020-10-26 14:42:57,278 [JavaFX Application Thread] [INFO ] seabattlegui.SeaBattleApplication - Seabattle started
+2020-10-26 14:43:00,121 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for aa - Player aa registered
+2020-10-26 16:25:33,647 [JavaFX Application Thread] [INFO ] seabattlegui.SeaBattleApplication - Seabattle started
+2020-10-26 16:25:50,193 [JavaFX Application Thread] [INFO ] seabattlegui.SeaBattleApplication - Seabattle started
+2020-10-26 16:27:08,261 [JavaFX Application Thread] [INFO ] seabattlegui.SeaBattleApplication - Seabattle started
+2020-10-26 16:27:59,602 [JavaFX Application Thread] [INFO ] seabattlegui.SeaBattleApplication - Seabattle started
+2020-10-26 16:28:03,899 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for aaa - Player aaa registered
+2020-10-26 16:29:04,167 [JavaFX Application Thread] [INFO ] seabattlegui.SeaBattleApplication - Seabattle started
+2020-10-26 16:29:07,027 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for aa - Player aa registered
+2020-10-27 09:41:29,936 [JavaFX Application Thread] [INFO ] seabattlegui.SeaBattleApplication - Seabattle started
+2020-10-27 09:41:35,953 [JavaFX Application Thread] [ERROR] seabattlegui.SeaBattleApplication - Register Player error: Username already exists.
+2020-10-27 09:41:55,324 [JavaFX Application Thread] [ERROR] seabattlegui.SeaBattleApplication - Register Player error: Username already exists.
+2020-10-27 09:41:59,568 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for aaa - Player aaa registered

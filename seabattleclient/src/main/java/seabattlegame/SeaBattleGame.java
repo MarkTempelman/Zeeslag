@@ -3,6 +3,7 @@
  */
 package seabattlegame;
 
+import APILoginREST.APILogin;
 import Logica.GameServer;
 import Models.Player;
 import Models.Position;
@@ -29,14 +30,18 @@ public class SeaBattleGame implements ISeaBattleGame {
   ArrayList<Player> players = new ArrayList<Player>();
   ArrayList<ShipManager> managers = new ArrayList<ShipManager>();
   SeaBattleAI AI = new SeaBattleAI(this);
+  APILogin login = APILogin.getInstance();
 
   @Override
-  public void registerPlayer(String name, String password, ISeaBattleGUI application, boolean singlePlayerMode ) {
+  public void registerPlayer(String name, String password, ISeaBattleGUI application, boolean singlePlayerMode ){
     //TODO: get player from Server. And check if name is unique, check if there are 2 players.
     //log.debug("Register Player {} - password {}", name, password);
     if(name == null || password == null || name == "" || password =="")
     {
       throw new IllegalArgumentException("Username or Password is null");
+    }
+    if(userLogin(name, password).contains("NOT_FOUND")){
+      throw new IllegalArgumentException("Username already exists.");
     }
     int applicationSize = applications.size();
     if(applicationSize < 2){
@@ -46,6 +51,18 @@ public class SeaBattleGame implements ISeaBattleGame {
       applications.get(applicationSize).setPlayerNumber(players.get(applicationSize).getPlayerNumber(), players.get(applicationSize).getName());
       managers.add(new ShipManager());
     }
+
+  }
+  private String userLogin(String name, String password) {
+    String returnString;
+    try {
+      returnString = login.register(name, password);
+      return returnString;
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+    return null;
   }
 
   @Override

@@ -18,7 +18,7 @@ public class SeaBattleAI {
         this.game = game;
     }
 
-    public void SetupAI(){
+    public void SetupAI() {
         game.registerPlayer("AI", "password", application, true);
         playerNr = application.getPlayerNumber();
         game.placeShipsAutomatically(playerNr);

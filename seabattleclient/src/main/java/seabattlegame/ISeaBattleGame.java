@@ -6,6 +6,7 @@ package seabattlegame;
 import seabattlegui.ISeaBattleGUI;
 import seabattlegui.ShipType;
 
+
 /**
  * Interface provided by the Sea Battle game to the graphical user interface.
  * @author Nico Kuijpers
@@ -27,7 +28,7 @@ public interface ISeaBattleGame {
      * number of players exceeds two in multi-player mode or
      * name is already registered.
      */
-    public void registerPlayer(String name, String password, ISeaBattleGUI application, boolean singlePlayerMode);
+    public void registerPlayer(String name, String password, ISeaBattleGUI application, boolean singlePlayerMode) ;
     
     /**
      * Place ships automatically. Ships that are already placed will be removed. 
