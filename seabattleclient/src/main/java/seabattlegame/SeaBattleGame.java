@@ -4,7 +4,6 @@
 package seabattlegame;
 
 import APILoginREST.APILogin;
-import Logica.GameServer;
 import Models.Player;
 import Models.Position;
 import Models.Ship;
@@ -34,8 +33,16 @@ public class SeaBattleGame implements ISeaBattleGame {
 
   @Override
   public void registerPlayer(String name, String password, ISeaBattleGUI application, boolean singlePlayerMode ){
-    //TODO: get player from Server. And check if name is unique, check if there are 2 players.
-    //log.debug("Register Player {} - password {}", name, password);
+    if(singlePlayerMode){
+      registerPlayerSingleplayer(name, password, application, singlePlayerMode);
+    }
+    else{
+      registerPlayerMultiplayer();
+    }
+
+  }
+
+  private void registerPlayerSingleplayer(String name, String password, ISeaBattleGUI application, boolean singlePlayerMode){
     if(name == null || password == null || name == "" || password =="")
     {
       throw new IllegalArgumentException("Username or Password is null");
@@ -51,8 +58,11 @@ public class SeaBattleGame implements ISeaBattleGame {
       applications.get(applicationSize).setPlayerNumber(players.get(applicationSize).getPlayerNumber(), players.get(applicationSize).getName());
       managers.add(new ShipManager());
     }
+  }
+  private void registerPlayerMultiplayer(){
 
   }
+
   private String userLogin(String name, String password) {
     String returnString;
     try {
@@ -67,6 +77,15 @@ public class SeaBattleGame implements ISeaBattleGame {
 
   @Override
   public void placeShipsAutomatically(int playerNr) {
+    if(singlePlayerMode){
+      placeShipsAutomaticallySingleplayer(playerNr);
+      return;
+    }
+    placeShipsAutomaticallyMultiplayer();
+
+  }
+
+  private void placeShipsAutomaticallySingleplayer(int playerNr) {
     IStrategy strategy = new SimpleStrategy();
     List<Ship> ships = strategy.placeShips();
     for (Ship ship: ships){
@@ -74,14 +93,33 @@ public class SeaBattleGame implements ISeaBattleGame {
     }
   }
 
+  private void placeShipsAutomaticallyMultiplayer(){
+
+  }
+
+
   @Override
   public void placeShip(int playerNr, ShipType shipType, int bowX, int bowY, boolean horizontal) {
+    if(singlePlayerMode){
+      placeShipSingleplayer(playerNr, shipType, bowX, bowY, horizontal);
+      return;
+    }
+    placeShipMultiplayer();
+  }
+
+  private void placeShipSingleplayer(int playerNr, ShipType shipType, int bowX, int bowY, boolean horizontal) {
     ShipManager manager = managers.get(playerNr);
     if(manager.shipTypeInList(shipType) || manager.allShips.size() >= 5){
       return;
     }
     tryPlaceShip(playerNr, shipType, bowX, bowY, horizontal);
   }
+
+  private void placeShipMultiplayer(){
+
+  }
+
+
 
   private void tryPlaceShip(int playerNr, ShipType shipType, int bowX, int bowY, boolean horizontal){
     Ship ship = new Ship(shipType, bowX, bowY, horizontal);
@@ -101,6 +139,7 @@ public class SeaBattleGame implements ISeaBattleGame {
       placeShipIfPossible(playerNr, ship);
     }
   }
+
 
   private void placeShipIfPossible(int playerNr, Ship ship){
     if(canShipBePlaced(ship, playerNr)){
@@ -132,6 +171,15 @@ public class SeaBattleGame implements ISeaBattleGame {
 
   @Override
   public void removeShip(int playerNr, int posX, int posY) {
+   if(singlePlayerMode){
+     removeShipSingleplayer(playerNr, posX, posY);
+     return;
+   }
+    removeShipMultiplayer();
+
+  }
+
+  private void removeShipSingleplayer(int playerNr, int posX, int posY) {
     List<Position> positions = managers.get(playerNr).getAllPositions();
     List<Position> deletePositions = managers.get(playerNr).getAllPositions();
     for (Position pos: positions) {
@@ -145,28 +193,59 @@ public class SeaBattleGame implements ISeaBattleGame {
 
   }
 
+  private void removeShipMultiplayer(){
+
+  }
+
+
+
   @Override
   public void removeAllShips(int playerNr) {
+   if(singlePlayerMode){
+     removeAllShipsSingleplayer(playerNr);
+     return;
+   }
+    removeAllShipsMultiplayer();
+  }
+  private void removeAllShipsSingleplayer(int playerNr) {
     List<Position> positions = managers.get(playerNr).removeAllShips();
     for (Position pos : positions) {
       applications.get(playerNr).showSquarePlayer(playerNr, pos.getX(), pos.getY(), SquareState.WATER);
     }
   }
+  private void removeAllShipsMultiplayer(){
+
+  }
 
   @Override
   public void notifyWhenReady(int playerNr) {
+    if(singlePlayerMode){
+      notifyWhenReadySingleplayer(playerNr);
+      return;
+    }
+    notifyWhenReadyMultiplayer();
+  }
+  private void notifyWhenReadySingleplayer(int playerNr) {
     if(managers.get(playerNr).allShips.size() == 5){
-      if(singlePlayerMode){
         applications.get(playerNr).notifyStartGame(playerNr);
         AI.SetupAI();
-      }
     } else {
       applications.get(playerNr).showErrorMessage(playerNr, "Not all ships have been placed!");
     }
   }
+  private void notifyWhenReadyMultiplayer(){
+
+  }
 
   @Override
   public void fireShot(int playerNr, int posX, int posY) {
+    if(singlePlayerMode){
+      fireShotSingleplayer(playerNr, posX, posY);
+      return;
+    }
+    fireShotMultiplayer();
+  }
+  private void fireShotSingleplayer(int playerNr, int posX, int posY) {
     ShotType shotType;
     int opponentNumber = getOpponentNumber(playerNr);
     shotType = managers.get(opponentNumber).receiveShot(posX, posY);
@@ -179,6 +258,9 @@ public class SeaBattleGame implements ISeaBattleGame {
     if(singlePlayerMode && playerNr == 0){
       AI.aiTurn();
     }
+  }
+  private void fireShotMultiplayer(){
+
   }
 
   private int getOpponentNumber(int playerNr){
@@ -203,6 +285,13 @@ public class SeaBattleGame implements ISeaBattleGame {
 
   @Override
   public void startNewGame(int playerNr) {
+    if(singlePlayerMode){
+      startNewGameSingleplayer(playerNr);
+      return;
+    }
+    startNewGameMultiplayer();
+  }
+  private void startNewGameSingleplayer(int playerNr) {
     clearMap(playerNr);
     if(singlePlayerMode){
       applications = new ArrayList<>();
@@ -213,6 +302,9 @@ public class SeaBattleGame implements ISeaBattleGame {
     applications.remove(playerNr);
     players.remove(playerNr);
     managers.remove(playerNr);
+  }
+  private void startNewGameMultiplayer(){
+
   }
 
   private void clearMap(int playerNr){

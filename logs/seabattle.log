@@ -261,3 +261,17 @@ Press Start new game to continue
 2020-10-27 09:41:35,953 [JavaFX Application Thread] [ERROR] seabattlegui.SeaBattleApplication - Register Player error: Username already exists.
 2020-10-27 09:41:55,324 [JavaFX Application Thread] [ERROR] seabattlegui.SeaBattleApplication - Register Player error: Username already exists.
 2020-10-27 09:41:59,568 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for aaa - Player aaa registered
+2020-10-27 14:36:47,190 [JavaFX Application Thread] [INFO ] seabattlegui.SeaBattleApplication - Seabattle started
+2020-10-27 14:36:59,381 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for mark - Player mark registered
+2020-10-27 14:37:51,959 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for mark - this ship can't be placed here
+2020-10-27 14:37:56,303 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for mark - this ship can't be placed here
+2020-10-27 14:38:03,431 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for mark - Start playing by selecting a square in Opponent's grid
+2020-10-27 14:38:10,945 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for mark - Ship of mark is sunk
+2020-10-27 14:38:15,753 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for mark - Ship of Opponent is sunk
+2020-10-27 14:38:19,640 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for mark - Ship of Opponent is sunk
+2020-10-27 14:38:23,016 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for mark - Ship of Opponent is sunk
+2020-10-27 14:38:27,466 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for mark - Ship of Opponent is sunk
+2020-10-27 14:38:30,394 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for mark - Select square in mark's grid to place ships
+2020-10-27 14:38:33,585 [JavaFX Application Thread] [ERROR] seabattlegui.SeaBattleApplication - Register Player error: Username already exists.
+2020-10-27 14:38:52,051 [JavaFX Application Thread] [ERROR] seabattlegui.SeaBattleApplication - Register Player error: Username already exists.
+2020-10-27 14:38:57,643 [JavaFX Application Thread] [DEBUG] seabattlegui.SeaBattleApplication - Show Message for mark1 - Player mark1 registered
