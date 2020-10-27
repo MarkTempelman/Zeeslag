@@ -24,11 +24,7 @@
             <artifactId>logback-classic</artifactId>
             <version>${logback-classic.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.eclipse.jetty.websocket</groupId>
-            <artifactId>javax-websocket-server-impl</artifactId>
-            <version>9.4.15.v20190215</version>
-        </dependency>
+
 
         <!-- JUnit 5 -->
         <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
@@ -56,9 +52,9 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-server</artifactId>
-            <version>9.4.31.v20200723</version>
+            <groupId>org.eclipse.jetty.websocket</groupId>
+            <artifactId>javax-websocket-server-impl</artifactId>
+            <version>9.4.15.v20190215</version>
         </dependency>
     </dependencies>
 </project>

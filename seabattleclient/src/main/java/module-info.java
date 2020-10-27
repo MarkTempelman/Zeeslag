@@ -6,6 +6,7 @@ module seabattleclient {
   requires seabattleshared;
     requires gson;
     requires java.sql;
+    requires javax.websocket.client.api;
 
     exports seabattlegui;
 }

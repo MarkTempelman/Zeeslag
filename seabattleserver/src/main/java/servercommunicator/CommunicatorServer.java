@@ -1,5 +1,9 @@
 package servercommunicator;
-
+import javax.websocket.server.ServerContainer;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.ServerConnector;
+import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.websocket.jsr356.server.deploy.WebSocketServerContainerInitializer;
 
 
 public class CommunicatorServer {
@@ -24,10 +28,10 @@ public class CommunicatorServer {
 
         try {
             // Initialize javax.websocket layer
-            ServerContainer wscontainer = WebSocketServerContainerInitializer.configureContext(webSocketContext);
+            ServerContainer wsContainer = WebSocketServerContainerInitializer.configureContext(webSocketContext);
 
             // Add WebSocket endpoint to javax.websocket layer
-            wscontainer.addEndpoint(CommunicatorServerWebSocket.class);
+            wsContainer.addEndpoint(CommunicatorServerWebSocket.class);
 
             webSocketServer.start();
             //server.dump(System.err);
