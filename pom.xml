@@ -7,6 +7,7 @@
         <module>seabattleclient</module>
         <module>seabattleserver</module>
         <module>seabattleshared</module>
+        <module>seabattleclient2</module>
     </modules>
     <packaging>pom</packaging>
     <properties>
