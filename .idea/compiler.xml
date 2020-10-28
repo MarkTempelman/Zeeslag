@@ -11,8 +11,7 @@
         <module name="seabattleshared" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="seabattleclient" target="11" />
+    <bytecodeTargetLevel target="11">
       <module name="seabattleclient2" target="11" />
       <module name="seabattleserver" target="11" />
       <module name="seabattleshared" target="11" />
