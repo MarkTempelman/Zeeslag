@@ -7,5 +7,6 @@ module seabattleclient2 {
     requires seabattleshared;
     requires javax.websocket.client.api;
     exports seabattlegui;
+    exports communication;
     opens APILoginREST;
 }

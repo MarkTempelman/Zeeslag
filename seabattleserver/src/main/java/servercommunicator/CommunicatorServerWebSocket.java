@@ -69,7 +69,7 @@ public class CommunicatorServerWebSocket {
             switch (operation) {
                 case REGISTER:
                     //register player
-
+                    System.out.println(wbMessage.getName());
                     break;
 //                case UNREGISTERPROPERTY:
 //                    // Do nothing as property may also have been registered by
