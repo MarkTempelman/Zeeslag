@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/SeaBattleStart.iml" filepath="$PROJECT_DIR$/SeaBattleStart.iml" />
-      <module fileurl="file://$PROJECT_DIR$/seabattleclient/seabattleclient.iml" filepath="$PROJECT_DIR$/seabattleclient/seabattleclient.iml" />
       <module fileurl="file://$PROJECT_DIR$/seabattleclient2/seabattleclient2.iml" filepath="$PROJECT_DIR$/seabattleclient2/seabattleclient2.iml" />
       <module fileurl="file://$PROJECT_DIR$/seabattleserver/seabattleserver.iml" filepath="$PROJECT_DIR$/seabattleserver/seabattleserver.iml" />
       <module fileurl="file://$PROJECT_DIR$/seabattleshared/seabattleshared.iml" filepath="$PROJECT_DIR$/seabattleshared/seabattleshared.iml" />
