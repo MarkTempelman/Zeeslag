@@ -70,6 +70,8 @@ public class CommunicatorServerWebSocket {
                 case REGISTER:
                     //register player
                     System.out.println(wbMessage.getName());
+                    Session s = sessions.get(0);
+                    s.getAsyncRemote().sendText(jsonMessage);
                     break;
 //                case UNREGISTERPROPERTY:
 //                    // Do nothing as property may also have been registered by

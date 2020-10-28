@@ -33,6 +33,7 @@ public class SeaBattleGame implements ISeaBattleGame {
   SeaBattleAI AI = new SeaBattleAI(this);
   APILogin login = APILogin.getInstance();
   private CommunicatorClientWebSocket communicator;
+  public static ISeaBattleGUI UI;
 
   @Override
   public void registerPlayer(String name, String password, ISeaBattleGUI application, boolean singlePlayerMode ){
@@ -47,6 +48,7 @@ public class SeaBattleGame implements ISeaBattleGame {
       registerPlayerSingleplayer(name, password, application, singlePlayerMode);
     }
     else{
+      UI = application;
       registerPlayerMultiplayer(name);
     }
   }

@@ -15,6 +15,8 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.WebSocketContainer;
 import javax.websocket.DeploymentException;
+
+import seabattlegame.SeaBattleGame;
 import seabattleshared.*;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -138,13 +140,33 @@ public class CommunicatorClientWebSocket extends Observable {
 
         // Parse incoming message
         WebSocketMessage wsMessage;
+        WebSocketType operation;
         try {
             wsMessage = gson.fromJson(jsonMessage, WebSocketMessage.class);
+            operation = wsMessage.getWebSocketType();
         }
         catch (JsonSyntaxException ex) {
             System.out.println("[WebSocket Client ERROR: cannot parse Json message " + jsonMessage);
             return;
         }
+
+        if (null != operation) {
+            switch (operation) {
+                case REGISTER:
+                    //register player
+                    SeaBattleGame.UI.setPlayerNumber(0, wsMessage.name);
+                    break;
+//                case UNREGISTERPROPERTY:
+//                    // Do nothing as property may also have been registered by
+//                    // another client
+//                    break;
+//
+                default:
+                    System.out.println("[WebSocket ERROR: cannot process Json message " + jsonMessage);
+                    break;
+            }
+        }
+
 
 //        // Only operation update property will be further processed
 //        WebSocketType operation;
