@@ -1,8 +1,8 @@
 package seabattleshared;
 
 public class WebSocketMessage {
-    private WebSocketType webSocketType;
-    private String name;
+    public WebSocketType webSocketType;
+    public String name;
 
     public WebSocketType getWebSocketType() {
         return webSocketType;
