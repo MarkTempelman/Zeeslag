@@ -9,13 +9,12 @@ import Models.Position;
 import Models.Ship;
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
+import communication.CommunicatorClientWebSocket;
 import seabattleai.IStrategy;
 import seabattleai.SeaBattleAI;
 import seabattleai.SimpleStrategy;
 import seabattlegui.*;
-import seabattleshared.ShipType;
-import seabattleshared.ShotType;
-import seabattleshared.SquareState;
+import seabattleshared.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +32,7 @@ public class SeaBattleGame implements ISeaBattleGame {
   ArrayList<ShipManager> managers = new ArrayList<ShipManager>();
   SeaBattleAI AI = new SeaBattleAI(this);
   APILogin login = APILogin.getInstance();
+  private CommunicatorClientWebSocket communicator;
 
   @Override
   public void registerPlayer(String name, String password, ISeaBattleGUI application, boolean singlePlayerMode ){
@@ -62,7 +62,12 @@ public class SeaBattleGame implements ISeaBattleGame {
     }
   }
   private void registerPlayerMultiplayer(String name){
-
+    WebSocketMessage message = new WebSocketMessage();
+    message.setName(name);
+    message.setWebSocketType(WebSocketType.REGISTER);
+    communicator = CommunicatorClientWebSocket.getInstance();
+    communicator.startClient();
+    communicator.sendMessageToServer(message);
   }
 
   private String userLogin(String name, String password) {
