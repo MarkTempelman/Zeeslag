@@ -2,6 +2,7 @@ package servercommunicator;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import seabattleserver.GameManager;
 import seabattleshared.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,6 +23,13 @@ public class CommunicatorServerWebSocket {
 
     // Map each property to list of sessions that are subscribed to that property
     public static final Map<String,List<Session>> propertySessions = new HashMap<>();
+
+    private GameManager gameManager = new GameManager();
+
+    private WebSocketMessage webSocketResponse;
+    private Session currentSession;
+    private Session otherSession;
+    private Gson gson = new Gson();
 
     @OnOpen
     public void onConnect(Session session) {
@@ -51,8 +59,10 @@ public class CommunicatorServerWebSocket {
 
     // Handle incoming message from client
     public void handleMessageFromClient(String jsonMessage, Session session) {
-        Gson gson = new Gson();
         WebSocketMessage wbMessage = null;
+
+        int numberOfSessions = sessions.size();
+
         try {
             wbMessage = gson.fromJson(jsonMessage,WebSocketMessage.class);
         }
@@ -61,50 +71,48 @@ public class CommunicatorServerWebSocket {
             return;
         }
 
-        // Operation defined in message
         WebSocketType operation;
         operation = wbMessage.getWebSocketType();
 
         if (null != operation) {
             switch (operation) {
                 case REGISTER:
-                    //register player
-                    System.out.println(wbMessage.getName());
-                    Session s = sessions.get(0);
-                    s.getAsyncRemote().sendText(jsonMessage);
+                    tryRegisterUser(numberOfSessions, wbMessage);
                     break;
-//                case UNREGISTERPROPERTY:
-//                    // Do nothing as property may also have been registered by
-//                    // another client
-//                    break;
-//                case SUBSCRIBETOPROPERTY:
-//                    // Subsribe to property if the property has been registered
-//                    if (propertySessions.get(property) != null) {
-//                        propertySessions.get(property).add(session);
-//                    }
-//                    break;
-//                case UNSUBSCRIBEFROMPROPERTY:
-//                    // Unsubsribe from property if the property has been registered
-//                    if (propertySessions.get(property) != null) {
-//                        propertySessions.get(property).remove(session);
-//                    }
-//                    break;
-//                case UPDATEPROPERTY:
-//                    // Send the message to all clients that are subscribed to this property
-//                    if (propertySessions.get(property) != null) {
-//                        System.out.println("[WebSocket send ] " + jsonMessage + " to:");
-//                        for (Session sess : propertySessions.get(property)) {
-//                            // Use asynchronous communication
-//                            System.out.println("\t\t >> Client associated with server side session ID: " + sess.getId());
-//                            sess.getAsyncRemote().sendText(jsonMessage);
-//                        }
-//                        System.out.println("[WebSocket end sending message to subscribers]");
-//                    }
-//                    break;
                 default:
                     System.out.println("[WebSocket ERROR: cannot process Json message " + jsonMessage);
                     break;
             }
         }
+    }
+
+    private void tryRegisterUser(int numberOfSessions, WebSocketMessage wbMessage){
+        if(sessions.size() > 2){
+            failedToRegisterUser(numberOfSessions);
+            return;
+        }
+        int playerNr = gameManager.registerPlayer(wbMessage.name);
+        registerUser(playerNr, false);
+        if(playerNr == 1){
+            registerUser(playerNr, true);
+            registerUser(gameManager.getOpponentNumber(playerNr), true);
+        }
+    }
+
+    private void failedToRegisterUser(int numberOfSessions){
+        webSocketResponse = new WebSocketMessage();
+        webSocketResponse.setWebSocketType(WebSocketType.ERROR);
+        webSocketResponse.setErrorMessage("This lobby is full");
+        currentSession = sessions.get(numberOfSessions - 1);
+        currentSession.getAsyncRemote().sendText(gson.toJson(webSocketResponse));
+    }
+
+    private void registerUser(int playerNr, boolean isOpponent){
+        webSocketResponse = new WebSocketMessage();
+        currentSession = sessions.get(playerNr);
+        webSocketResponse.setName(isOpponent ? gameManager.getPlayerNames().get(gameManager.getOpponentNumber(playerNr)) : gameManager.getPlayerNames().get(playerNr));
+        webSocketResponse.setPlayerNr(playerNr);
+        webSocketResponse.setWebSocketType(isOpponent ? WebSocketType.REGISTEROPPONENT : WebSocketType.REGISTERPLAYER);
+        currentSession.getAsyncRemote().sendText(gson.toJson(webSocketResponse));
     }
 }

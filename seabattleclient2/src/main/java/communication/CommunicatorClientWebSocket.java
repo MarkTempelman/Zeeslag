@@ -152,15 +152,17 @@ public class CommunicatorClientWebSocket extends Observable {
 
         if (null != operation) {
             switch (operation) {
-                case REGISTER:
+                case REGISTERPLAYER:
                     //register player
-                    SeaBattleGame.UI.setPlayerNumber(0, wsMessage.name);
+                    SeaBattleGame.UI.setPlayerNumber(wsMessage.playerNr, wsMessage.name);
                     break;
-//                case UNREGISTERPROPERTY:
-//                    // Do nothing as property may also have been registered by
-//                    // another client
-//                    break;
-//
+                case REGISTEROPPONENT:
+                    SeaBattleGame.UI.setOpponentName(wsMessage.playerNr, wsMessage.name);
+                    break;
+                case ERROR:
+                    System.out.println(wsMessage.getErrorMessage());
+                    stopClient();
+                    break;
                 default:
                     System.out.println("[WebSocket ERROR: cannot process Json message " + jsonMessage);
                     break;
