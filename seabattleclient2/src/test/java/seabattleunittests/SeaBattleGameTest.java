@@ -3,6 +3,7 @@
  */
 package seabattleunittests;
 
+import Models.Ship;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,10 +41,19 @@ class SeaBattleGameTest {
         // Create mock Sea Battle GUI for opponent
         applicationOpponent = new MockSeaBattleApplication();
         game.registerPlayer("s", "s", applicationPlayer, true);
+
     }
     
     @AfterEach
     void tearDown() {
+        //game.removeAllShips(0);
+    }
+    private void placeAllShips(){
+        game.placeShip(0, ShipType.AIRCRAFTCARRIER, 0, 0, true);
+        game.placeShip(0, ShipType.BATTLESHIP, 0, 1, true);
+        game.placeShip(0, ShipType.CRUISER, 0, 2, true);
+        game.placeShip(0, ShipType.SUBMARINE, 0, 3, true);
+        game.placeShip(0, ShipType.MINESWEEPER, 0, 4, true);
     }
 
     /**
@@ -97,7 +107,7 @@ class SeaBattleGameTest {
                 "Expected registerPlayer() to throw, but it didn't"
         );
 
-        assertTrue(thrown.getMessage().contains("application"));
+        assertTrue(thrown.getMessage().contains("Application"));
     }
     
     /**
@@ -137,6 +147,16 @@ class SeaBattleGameTest {
     @Test
     void placeShipOutOfBounds(){
         game.placeShip(0, ShipType.CRUISER, 9, 9, true);
+
+        int expectedResult = 0;
+        int actualResult = applicationPlayer.numberSquaresPlayerWithSquareState(SquareState.SHIP);
+
+        assertEquals(expectedResult,actualResult, "Wrong number of squares where ships are placed");
+    }
+
+    @Test
+    void placeShipOutOfBoundsVertical(){
+        game.placeShip(0, ShipType.CRUISER, 9, 9, false);
 
         int expectedResult = 0;
         int actualResult = applicationPlayer.numberSquaresPlayerWithSquareState(SquareState.SHIP);
@@ -211,7 +231,9 @@ class SeaBattleGameTest {
 
     @Test
     void testFireShot(){
-        game.fireShot(0, 3, 3);
+        placeAllShips();
+        game.notifyWhenReady(0);
+        game.fireShot(0, 9, 9);
         ShotType t = applicationPlayer.getLastShotPlayer();
         ShotType expected = ShotType.MISSED;
         assertEquals(expected,t, "It was a different ShotType.");
@@ -219,16 +241,16 @@ class SeaBattleGameTest {
 
     @Test
     void testFireShotHit(){
-        game.placeShip(0, ShipType.CRUISER, 4, 4, true);
-
-        game.fireShot(0, 4, 4);
+        placeAllShips();
+        game.notifyWhenReady(0);
+        game.fireShot(0, 0, 4);
         ShotType t = applicationPlayer.getLastShotPlayer();
         ShotType expected = ShotType.HIT;
         assertEquals(expected,t, "It was a different ShotType.");
     }
 
     @Test
-    void testStartNewGameFail(){
+    void testStartNewGameSuccess(){
         game.placeShip(0, ShipType.CRUISER, 4, 4, true);
         game.placeShip(0, ShipType.MINESWEEPER, 2, 4, true);
 
@@ -238,14 +260,5 @@ class SeaBattleGameTest {
         assertEquals(expectedResult,actualResult, "There are still ships, so the board hasn't been cleared.");
     }
 
-    @Test
-    void testStartNewGameSuccess(){
-        game.placeShipsAutomatically(0);
-
-        game.startNewGame(0);
-        int expectedResult = 5 + 4 + 3 + 3 + 2;
-        int actualResult = applicationPlayer.numberSquaresPlayerWithSquareState(SquareState.SHIP);
-        assertEquals(expectedResult,actualResult, "There are still ships, so the board hasn't been cleared.");
-    }
 }
 

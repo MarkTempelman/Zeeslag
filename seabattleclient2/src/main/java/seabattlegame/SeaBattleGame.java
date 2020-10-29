@@ -37,9 +37,9 @@ public class SeaBattleGame implements ISeaBattleGame {
 
   @Override
   public void registerPlayer(String name, String password, ISeaBattleGUI application, boolean singlePlayerMode ){
-    if(name == null || password == null || name == "" || password =="")
+    if(name == null || password == null || name == "" || password =="" || application == null)
     {
-      throw new IllegalArgumentException("Username or Password is null");
+      throw new IllegalArgumentException("Username or Password or Application is null");
     }
 //    if(userLogin(name, password).contains("NOT_FOUND")){
 //      throw new IllegalArgumentException("Username already exists.");
