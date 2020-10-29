@@ -34,30 +34,12 @@ public class GameManager {
         if(manager.shipTypeInList(shipType) || manager.allShips.size() >= 5){
             return;
         }
-        tryPlaceShip(playerNr, shipType, bowX, bowY, horizontal);
-    }
-
-    private void tryPlaceShip(int playerNr, ShipType shipType, int bowX, int bowY, boolean horizontal){
-        Ship ship = new Ship(shipType, bowX, bowY, horizontal);
-        Position pos1 = new Position(bowX, bowY);
-        ship.addPositions(pos1);
-        if(horizontal) {
-            for(int i = 0; i < shipType.length; i++) {
-                Position pos = new Position(bowX + i, bowY);
-                ship.addPositions(pos);
-            }
-            placeShipIfPossible(playerNr, ship);
-        } else {
-            for(int i = 0; i < shipType.length; i++) {
-                Position pos = new Position(bowX, bowY + i);
-                ship.addPositions(pos);
-            }
-            placeShipIfPossible(playerNr, ship);
-        }
+        Ship ship = GameHelper.tryPlaceShip(shipType, bowX, bowY, horizontal);
+        placeShipIfPossible(playerNr, ship);
     }
 
     private void placeShipIfPossible(int playerNr, Ship ship){
-        if(canShipBePlaced(ship, playerNr)){
+        if(GameHelper.canShipBePlaced(ship, shipManagers.get(playerNr))){
             for (Position position : ship.getPositions()) {
                 communicator.sendMessageToPlayer(playerNr, new WebSocketMessage(
                         WebSocketType.PLACESHIP, playerNr, position.getX(), position.getY()
@@ -69,22 +51,5 @@ public class GameManager {
                     WebSocketType.ERROR, "this ship can't be placed here"
             ));
         }
-    }
-
-    public boolean canShipBePlaced(Ship ship, int playerNr){
-        for (Position position : ship.getPositions()) {
-            if(checkIfOutOfBounds(position.getX(), position.getY()) || checkIfOnSquare(position.getX(), position.getY(), playerNr)){
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public boolean checkIfOutOfBounds(int x, int y){
-        return x > 9 || x < 0 || y > 9 || y < 0;
-    }
-
-    public boolean checkIfOnSquare(int x, int y, int playerNr){
-        return shipManagers.get(playerNr).checkIfOverlap(x, y);
     }
 }

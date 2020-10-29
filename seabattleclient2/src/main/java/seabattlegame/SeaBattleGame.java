@@ -86,26 +86,12 @@ public class SeaBattleGame implements ISeaBattleGame {
 
   @Override
   public void placeShipsAutomatically(int playerNr) {
-    if(singlePlayerMode){
-      placeShipsAutomaticallySingleplayer(playerNr);
-      return;
-    }
-    placeShipsAutomaticallyMultiplayer();
-
-  }
-
-  private void placeShipsAutomaticallySingleplayer(int playerNr) {
     IStrategy strategy = new SimpleStrategy();
     List<Ship> ships = strategy.placeShips();
     for (Ship ship: ships){
       placeShip(playerNr, ship.getType(), ship.getxBow(), ship.getyBow(), ship.isHorizontal());
     }
   }
-
-  private void placeShipsAutomaticallyMultiplayer(){
-
-  }
-
 
   @Override
   public void placeShip(int playerNr, ShipType shipType, int bowX, int bowY, boolean horizontal) {
@@ -121,7 +107,8 @@ public class SeaBattleGame implements ISeaBattleGame {
     if(manager.shipTypeInList(shipType) || manager.allShips.size() >= 5){
       return;
     }
-    tryPlaceShip(playerNr, shipType, bowX, bowY, horizontal);
+    Ship ship = GameHelper.tryPlaceShip(shipType, bowX, bowY, horizontal);
+    placeShipIfPossible(playerNr, ship);
   }
 
   private void placeShipMultiplayer(int playerNr, ShipType shipType, int bowX, int bowY, boolean horizontal){
@@ -129,30 +116,8 @@ public class SeaBattleGame implements ISeaBattleGame {
     communicator.sendMessageToServer(message);
   }
 
-
-
-  private void tryPlaceShip(int playerNr, ShipType shipType, int bowX, int bowY, boolean horizontal){
-    Ship ship = new Ship(shipType, bowX, bowY, horizontal);
-    Position pos1 = new Position(bowX, bowY);
-    ship.addPositions(pos1);
-    if(horizontal) {
-      for(int i = 0; i < shipType.length; i++) {
-        Position pos = new Position(bowX + i, bowY);
-        ship.addPositions(pos);
-      }
-      placeShipIfPossible(playerNr, ship);
-    } else {
-      for(int i = 0; i < shipType.length; i++) {
-        Position pos = new Position(bowX, bowY + i);
-        ship.addPositions(pos);
-      }
-      placeShipIfPossible(playerNr, ship);
-    }
-  }
-
-
   private void placeShipIfPossible(int playerNr, Ship ship){
-    if(canShipBePlaced(ship, playerNr)){
+    if(GameHelper.canShipBePlaced(ship, managers.get(playerNr))){
       for (Position position : ship.getPositions()) {
         applications.get(playerNr).showSquarePlayer(playerNr, position.getX(), position.getY(), SquareState.SHIP);
       }
@@ -160,19 +125,6 @@ public class SeaBattleGame implements ISeaBattleGame {
     } else {
       applications.get(playerNr).showErrorMessage(playerNr, "this ship can't be placed here");
     }
-  }
-
-  public boolean canShipBePlaced(Ship ship, int playerNr){
-    for (Position position : ship.getPositions()) {
-      if(checkIfOutOfBounds(position.getX(), position.getY()) || checkIfOnSquare(position.getX(), position.getY(), playerNr)){
-        return false;
-      }
-    }
-    return true;
-  }
-
-  public boolean checkIfOutOfBounds(int x, int y){
-    return x > 9 || x < 0 || y > 9 || y < 0;
   }
 
   public boolean checkIfOnSquare(int x, int y, int playerNr){
