@@ -155,6 +155,16 @@ class SeaBattleGameTest {
     }
 
     @Test
+    void placeShipOutOfBoundsVertical(){
+        game.placeShip(0, ShipType.CRUISER, 9, 9, false);
+
+        int expectedResult = 0;
+        int actualResult = applicationPlayer.numberSquaresPlayerWithSquareState(SquareState.SHIP);
+
+        assertEquals(expectedResult,actualResult, "Wrong number of squares where ships are placed");
+    }
+
+    @Test
     void testPlaceShipVertical(){
         game.placeShip(0, ShipType.CRUISER, 4, 4, false);
 
@@ -250,17 +260,5 @@ class SeaBattleGameTest {
         assertEquals(expectedResult,actualResult, "There are still ships, so the board hasn't been cleared.");
     }
 
-    @Test
-    void testStartNewGameFail(){
-        game.placeShipsAutomatically(0);
-        game.startNewGame(0);
-        applicationPlayer = new MockSeaBattleApplication();
-        game.registerPlayer("s", "s", applicationPlayer, true);
-
-        placeAllShips();
-        int expectedResult = 5 + 4 + 3 + 3 + 2;
-        int actualResult = applicationPlayer.numberSquaresPlayerWithSquareState(SquareState.SHIP);
-        assertEquals(expectedResult,actualResult, "There are still ships, so the board hasn't been cleared.");
-    }
 }
 
