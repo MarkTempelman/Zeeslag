@@ -160,8 +160,14 @@ public class CommunicatorClientWebSocket extends Observable {
                     SeaBattleGame.UI.setOpponentName(wsMessage.playerNr, wsMessage.name);
                     break;
                 case ERROR:
+                    SeaBattleGame.UI.showErrorMessage(wsMessage.playerNr, wsMessage.errorMessage);
+                    break;
+                case FATALERROR:
                     System.out.println(wsMessage.getErrorMessage());
                     stopClient();
+                    break;
+                case PLACESHIP:
+                    SeaBattleGame.UI.showSquarePlayer(wsMessage.playerNr, wsMessage.x, wsMessage.y, SquareState.SHIP);
                     break;
                 default:
                     System.out.println("[WebSocket ERROR: cannot process Json message " + jsonMessage);

@@ -1,6 +1,6 @@
 package seabattleai;
 
-import Models.Ship;
+import seabattleshared.Ship;
 import seabattleshared.ShipType;
 
 import java.util.ArrayList;

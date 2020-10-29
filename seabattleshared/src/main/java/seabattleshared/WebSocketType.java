@@ -5,4 +5,6 @@ public enum WebSocketType {
     REGISTERPLAYER,
     REGISTEROPPONENT,
     ERROR,
+    FATALERROR,
+    PLACESHIP,
 }

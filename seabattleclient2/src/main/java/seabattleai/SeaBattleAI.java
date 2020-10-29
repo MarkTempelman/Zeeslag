@@ -1,8 +1,7 @@
 package seabattleai;
 
-import Models.Position;
+import seabattleshared.Position;
 import seabattlegame.ISeaBattleGame;
-import seabattlegame.SeaBattleGame;
 import seabattlegui.ISeaBattleGUI;
 
 import java.util.ArrayList;

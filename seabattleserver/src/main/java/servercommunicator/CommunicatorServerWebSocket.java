@@ -79,6 +79,9 @@ public class CommunicatorServerWebSocket {
                 case REGISTER:
                     tryRegisterUser(numberOfSessions, wbMessage);
                     break;
+                case PLACESHIP:
+                    gameManager.tryPlaceShip(wbMessage.playerNr, wbMessage.horizontal, wbMessage.shipType, wbMessage.x, wbMessage.y, this);
+                    break;
                 default:
                     System.out.println("[WebSocket ERROR: cannot process Json message " + jsonMessage);
                     break;
@@ -100,19 +103,21 @@ public class CommunicatorServerWebSocket {
     }
 
     private void failedToRegisterUser(int numberOfSessions){
-        webSocketResponse = new WebSocketMessage();
-        webSocketResponse.setWebSocketType(WebSocketType.ERROR);
-        webSocketResponse.setErrorMessage("This lobby is full");
-        currentSession = sessions.get(numberOfSessions - 1);
-        currentSession.getAsyncRemote().sendText(gson.toJson(webSocketResponse));
+        webSocketResponse = new WebSocketMessage(WebSocketType.FATALERROR, "This lobby is full");
+        sendMessageToPlayer(numberOfSessions - 1, webSocketResponse);
     }
 
     private void registerUser(int playerNr, boolean isOpponent){
-        webSocketResponse = new WebSocketMessage();
+        webSocketResponse = new WebSocketMessage(
+                isOpponent ? WebSocketType.REGISTEROPPONENT : WebSocketType.REGISTERPLAYER,
+                isOpponent ? gameManager.getPlayerNames().get(gameManager.getOpponentNumber(playerNr)) : gameManager.getPlayerNames().get(playerNr),
+                playerNr
+        );
+        sendMessageToPlayer(playerNr, webSocketResponse);
+    }
+
+    public void sendMessageToPlayer(int playerNr, WebSocketMessage webSocketMessage){
         currentSession = sessions.get(playerNr);
-        webSocketResponse.setName(isOpponent ? gameManager.getPlayerNames().get(gameManager.getOpponentNumber(playerNr)) : gameManager.getPlayerNames().get(playerNr));
-        webSocketResponse.setPlayerNr(playerNr);
-        webSocketResponse.setWebSocketType(isOpponent ? WebSocketType.REGISTEROPPONENT : WebSocketType.REGISTERPLAYER);
-        currentSession.getAsyncRemote().sendText(gson.toJson(webSocketResponse));
+        currentSession.getAsyncRemote().sendText(gson.toJson(webSocketMessage));
     }
 }

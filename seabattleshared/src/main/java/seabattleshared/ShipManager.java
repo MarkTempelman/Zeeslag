@@ -1,7 +1,7 @@
-package seabattlegame;
+package seabattleshared;
 
-import Models.Position;
-import Models.Ship;
+import seabattleshared.Position;
+import seabattleshared.Ship;
 import seabattleshared.ShipType;
 import seabattleshared.ShotType;
 
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ShipManager {
-    List<Ship> allShips = new ArrayList<>();
+    public List<Ship> allShips = new ArrayList<>();
 
     public List<Ship> getShips() {
         return allShips;

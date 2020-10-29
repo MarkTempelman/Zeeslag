@@ -1,5 +1,6 @@
-package Models;
+package seabattleshared;
 
+import seabattleshared.Position;
 import seabattleshared.ShipType;
 
 import java.util.ArrayList;

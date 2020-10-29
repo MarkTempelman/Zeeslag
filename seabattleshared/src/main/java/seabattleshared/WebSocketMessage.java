@@ -5,6 +5,41 @@ public class WebSocketMessage {
     public String name;
     public String errorMessage;
     public int playerNr;
+    public boolean horizontal;
+    public ShipType shipType;
+    public int x;
+    public int y;
+
+    public WebSocketMessage(){
+
+    }
+
+    public WebSocketMessage(WebSocketType webSocketType, String errorMessage) {
+        this.webSocketType = webSocketType;
+        this.errorMessage = errorMessage;
+    }
+
+    public WebSocketMessage(WebSocketType webSocketType, String name, int playerNr) {
+        this.webSocketType = webSocketType;
+        this.name = name;
+        this.playerNr = playerNr;
+    }
+
+    public WebSocketMessage(WebSocketType webSocketType, int playerNr, boolean horizontal, ShipType shipType, int x, int y) {
+        this.webSocketType = webSocketType;
+        this.playerNr = playerNr;
+        this.horizontal = horizontal;
+        this.shipType = shipType;
+        this.x = x;
+        this.y = y;
+    }
+
+    public WebSocketMessage(WebSocketType webSocketType, int playerNr, int x, int y) {
+        this.webSocketType = webSocketType;
+        this.playerNr = playerNr;
+        this.x = x;
+        this.y = y;
+    }
 
     public WebSocketType getWebSocketType() {
         return webSocketType;
@@ -36,5 +71,37 @@ public class WebSocketMessage {
 
     public void setPlayerNr(int playerNr) {
         this.playerNr = playerNr;
+    }
+
+    public boolean isHorizontal() {
+        return horizontal;
+    }
+
+    public void setHorizontal(boolean horizontal) {
+        this.horizontal = horizontal;
+    }
+
+    public ShipType getShipType() {
+        return shipType;
+    }
+
+    public void setShipType(ShipType shipType) {
+        this.shipType = shipType;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
     }
 }

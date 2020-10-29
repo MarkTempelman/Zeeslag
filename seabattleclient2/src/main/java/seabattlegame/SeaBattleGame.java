@@ -5,8 +5,8 @@ package seabattlegame;
 
 import APILoginREST.APILogin;
 import Models.Player;
-import Models.Position;
-import Models.Ship;
+import seabattleshared.Position;
+import seabattleshared.Ship;
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
 import communication.CommunicatorClientWebSocket;
@@ -113,7 +113,7 @@ public class SeaBattleGame implements ISeaBattleGame {
       placeShipSingleplayer(playerNr, shipType, bowX, bowY, horizontal);
       return;
     }
-    placeShipMultiplayer();
+    placeShipMultiplayer(playerNr, shipType, bowX, bowY, horizontal);
   }
 
   private void placeShipSingleplayer(int playerNr, ShipType shipType, int bowX, int bowY, boolean horizontal) {
@@ -124,8 +124,9 @@ public class SeaBattleGame implements ISeaBattleGame {
     tryPlaceShip(playerNr, shipType, bowX, bowY, horizontal);
   }
 
-  private void placeShipMultiplayer(){
-
+  private void placeShipMultiplayer(int playerNr, ShipType shipType, int bowX, int bowY, boolean horizontal){
+    WebSocketMessage message = new WebSocketMessage(WebSocketType.PLACESHIP, playerNr, horizontal, shipType, bowX, bowY);
+    communicator.sendMessageToServer(message);
   }
 
 

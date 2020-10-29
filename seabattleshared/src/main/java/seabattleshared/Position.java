@@ -1,4 +1,4 @@
-package Models;
+package seabattleshared;
 
 public class Position {
     int x;
