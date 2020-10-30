@@ -10,6 +10,7 @@ public class WebSocketMessage {
     public int x;
     public int y;
     public SquareState squareState;
+    public ShotType shotType;
 
     public WebSocketMessage(){
 
@@ -35,6 +36,12 @@ public class WebSocketMessage {
         this.webSocketType = webSocketType;
         this.name = name;
         this.playerNr = playerNr;
+    }
+
+    public WebSocketMessage(WebSocketType webSocketType, int playerNr, ShotType shotType) {
+        this.webSocketType = webSocketType;
+        this.playerNr = playerNr;
+        this.shotType = shotType;
     }
 
     public WebSocketMessage(WebSocketType webSocketType, int playerNr, boolean horizontal, ShipType shipType, int x, int y) {

@@ -35,4 +35,17 @@ public class GameHelper {
     private static boolean checkIfOnSquare(int x, int y, ShipManager manager){
         return manager.checkIfOverlap(x, y);
     }
+
+    public static SquareState shotTypeToSquareState(ShotType shotType){
+        switch(shotType){
+            case MISSED:
+                return SquareState.SHOTMISSED;
+            case HIT:
+                return SquareState.SHOTHIT;
+            case SUNK:
+            case ALLSUNK:
+                return SquareState.SHIPSUNK;
+        }
+        return SquareState.SHOTMISSED;
+    }
 }

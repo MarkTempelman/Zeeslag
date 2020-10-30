@@ -94,6 +94,9 @@ public class CommunicatorServerWebSocket {
                 case READY:
                     gameManager.notifyWhenReady(wbMessage.playerNr, this);
                     break;
+                case FIRESHOT:
+                    gameManager.fireShot(wbMessage.playerNr, wbMessage.x, wbMessage.y, this);
+                    break;
                 default:
                     System.out.println("[WebSocket ERROR: cannot process Json message " + jsonMessage);
                     break;

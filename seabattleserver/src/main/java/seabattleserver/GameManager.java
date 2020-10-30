@@ -7,6 +7,8 @@ import servercommunicator.CommunicatorServerWebSocket;
 import java.util.ArrayList;
 import java.util.List;
 
+import static seabattleshared.GameHelper.shotTypeToSquareState;
+
 public class GameManager {
     private static ArrayList<String> playerNames = new ArrayList<>();
     private static ArrayList<ShipManager> shipManagers = new ArrayList<>();
@@ -106,5 +108,18 @@ public class GameManager {
         if(!readyPlayers.contains(playerNr)){
             readyPlayers.add(playerNr);
         }
+    }
+
+    public void fireShot(int playerNr, int posX, int posY, CommunicatorServerWebSocket communicator){
+        this.communicator = communicator;
+        int opponentNr = getOpponentNumber(playerNr);
+        ShotType shotType = shipManagers.get(opponentNr).receiveShot(posX, posY);
+        SquareState squareState = shotTypeToSquareState(shotType);
+
+        communicator.sendMessageToPlayer(playerNr, new WebSocketMessage(WebSocketType.PLAYERSHOT, playerNr, shotType));
+        communicator.sendMessageToPlayer(opponentNr, new WebSocketMessage(WebSocketType.OPPONENTSHOT, opponentNr, shotType));
+
+        communicator.sendMessageToPlayer(playerNr, new WebSocketMessage(WebSocketType.SETSQUAREOPPONENT, playerNr, posX, posY, squareState));
+        communicator.sendMessageToPlayer(opponentNr, new WebSocketMessage(WebSocketType.SETSQUAREPLAYER, opponentNr, posX, posY, squareState));
     }
 }

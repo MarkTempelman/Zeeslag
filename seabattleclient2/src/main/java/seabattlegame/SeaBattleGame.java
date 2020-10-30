@@ -19,6 +19,8 @@ import seabattleshared.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static seabattleshared.GameHelper.shotTypeToSquareState;
+
 /**
  * The Sea Battle game. To be implemented.
  *
@@ -222,7 +224,7 @@ public class SeaBattleGame implements ISeaBattleGame {
       fireShotSingleplayer(playerNr, posX, posY);
       return;
     }
-    fireShotMultiplayer();
+    fireShotMultiplayer(playerNr, posX, posY);
   }
   private void fireShotSingleplayer(int playerNr, int posX, int posY) {
     ShotType shotType;
@@ -238,8 +240,9 @@ public class SeaBattleGame implements ISeaBattleGame {
       AI.aiTurn();
     }
   }
-  private void fireShotMultiplayer(){
-
+  private void fireShotMultiplayer(int playerNr, int posX, int posY){
+    WebSocketMessage message = new WebSocketMessage(WebSocketType.FIRESHOT, playerNr, posX, posY);
+    communicator.sendMessageToServer(message);
   }
 
   private int getOpponentNumber(int playerNr){
@@ -247,19 +250,6 @@ public class SeaBattleGame implements ISeaBattleGame {
       return 1;
     }
     return 0;
-  }
-
-  private SquareState shotTypeToSquareState(ShotType shotType){
-    switch(shotType){
-      case MISSED:
-        return SquareState.SHOTMISSED;
-      case HIT:
-        return SquareState.SHOTHIT;
-      case SUNK:
-      case ALLSUNK:
-        return SquareState.SHIPSUNK;
-    }
-    return SquareState.SHOTMISSED;
   }
 
   @Override
