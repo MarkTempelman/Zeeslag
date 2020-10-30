@@ -15,8 +15,19 @@ public class WebSocketMessage {
 
     }
 
+    public WebSocketMessage(WebSocketType webSocketType, int playerNr) {
+        this.webSocketType = webSocketType;
+        this.playerNr = playerNr;
+    }
+
     public WebSocketMessage(WebSocketType webSocketType, String errorMessage) {
         this.webSocketType = webSocketType;
+        this.errorMessage = errorMessage;
+    }
+
+    public WebSocketMessage(WebSocketType webSocketType, int playerNr, String errorMessage){
+        this.webSocketType = webSocketType;
+        this.playerNr = playerNr;
         this.errorMessage = errorMessage;
     }
 

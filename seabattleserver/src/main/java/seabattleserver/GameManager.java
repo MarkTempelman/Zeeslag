@@ -1,6 +1,7 @@
 package seabattleserver;
 
 import seabattleshared.*;
+import servercommunicator.CommunicatorServer;
 import servercommunicator.CommunicatorServerWebSocket;
 
 import java.util.ArrayList;
@@ -10,6 +11,8 @@ public class GameManager {
     private static ArrayList<String> playerNames = new ArrayList<>();
     private static ArrayList<ShipManager> shipManagers = new ArrayList<>();
     private CommunicatorServerWebSocket communicator;
+
+    private static ArrayList<java.lang.Integer> readyPlayers = new ArrayList<>();
 
     public ArrayList<String> getPlayerNames(){
         return playerNames;
@@ -74,6 +77,34 @@ public class GameManager {
             communicator.sendMessageToPlayer(playerNr, new WebSocketMessage(WebSocketType.SETSQUAREPLAYER, playerNr, posX, posY, SquareState.SHIP));
         } else {
             communicator.sendMessageToPlayer(playerNr, new WebSocketMessage(WebSocketType.SETSQUAREPLAYER, playerNr, posX, posY, SquareState.WATER));
+        }
+    }
+
+    public void removeAllShips(int playerNr, CommunicatorServerWebSocket communicator){
+        this.communicator = communicator;
+        List<Position> positions = shipManagers.get(playerNr).removeAllShips();
+        for(Position pos : positions){
+            communicator.sendMessageToPlayer(playerNr, new WebSocketMessage(WebSocketType.SETSQUAREPLAYER, playerNr, pos.getX(), pos.getY(), SquareState.WATER));
+        }
+    }
+
+    public void notifyWhenReady(int playerNr, CommunicatorServerWebSocket communicator){
+        this.communicator = communicator;
+        if(shipManagers.get(playerNr).allShips.size() == 5){
+            readyPlayer(playerNr);
+            if(readyPlayers.size() == 2){
+                communicator.sendMessageToPlayer(playerNr, new WebSocketMessage(WebSocketType.STARTGAME, playerNr));
+                int opponentNr = getOpponentNumber(playerNr);
+                communicator.sendMessageToPlayer(opponentNr, new WebSocketMessage(WebSocketType.STARTGAME, opponentNr));
+            }
+        } else {
+            communicator.sendMessageToPlayer(playerNr, new WebSocketMessage(WebSocketType.ERROR, playerNr, "Not all ships have been placed!"));
+        }
+    }
+
+    private void readyPlayer(int playerNr){
+        if(!readyPlayers.contains(playerNr)){
+            readyPlayers.add(playerNr);
         }
     }
 }

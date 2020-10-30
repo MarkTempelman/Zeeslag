@@ -181,7 +181,7 @@ public class SeaBattleGame implements ISeaBattleGame {
      removeAllShipsSingleplayer(playerNr);
      return;
    }
-    removeAllShipsMultiplayer();
+    removeAllShipsMultiplayer(playerNr);
   }
   private void removeAllShipsSingleplayer(int playerNr) {
     List<Position> positions = managers.get(playerNr).removeAllShips();
@@ -189,8 +189,10 @@ public class SeaBattleGame implements ISeaBattleGame {
       applications.get(playerNr).showSquarePlayer(playerNr, pos.getX(), pos.getY(), SquareState.WATER);
     }
   }
-  private void removeAllShipsMultiplayer(){
 
+  private void removeAllShipsMultiplayer(int playerNr){
+    WebSocketMessage message = new WebSocketMessage(WebSocketType.REMOVEALLSHIPS, playerNr);
+    communicator.sendMessageToServer(message);
   }
 
   @Override
@@ -199,7 +201,7 @@ public class SeaBattleGame implements ISeaBattleGame {
       notifyWhenReadySingleplayer(playerNr);
       return;
     }
-    notifyWhenReadyMultiplayer();
+    notifyWhenReadyMultiplayer(playerNr);
   }
   private void notifyWhenReadySingleplayer(int playerNr) {
     if(managers.get(playerNr).allShips.size() == 5){
@@ -209,8 +211,9 @@ public class SeaBattleGame implements ISeaBattleGame {
       applications.get(playerNr).showErrorMessage(playerNr, "Not all ships have been placed!");
     }
   }
-  private void notifyWhenReadyMultiplayer(){
-
+  private void notifyWhenReadyMultiplayer(int playerNr){
+    WebSocketMessage message = new WebSocketMessage(WebSocketType.READY, playerNr);
+    communicator.sendMessageToServer(message);
   }
 
   @Override

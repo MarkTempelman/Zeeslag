@@ -10,4 +10,7 @@ public enum WebSocketType {
     REMOVESHIP,
     SETSQUAREPLAYER,
     CHECKOVERLAP,
+    REMOVEALLSHIPS,
+    READY,
+    STARTGAME,
 }
