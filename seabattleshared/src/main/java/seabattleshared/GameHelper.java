@@ -1,7 +1,7 @@
 package seabattleshared;
 
 public class GameHelper {
-    public static Ship tryPlaceShip(ShipType shipType, int bowX, int bowY, boolean horizontal){
+    public static Ship createShip(ShipType shipType, int bowX, int bowY, boolean horizontal){
         Ship ship = new Ship(shipType, bowX, bowY, horizontal);
         Position pos1 = new Position(bowX, bowY);
         ship.addPositions(pos1);

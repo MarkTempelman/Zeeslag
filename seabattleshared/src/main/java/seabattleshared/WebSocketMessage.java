@@ -9,6 +9,7 @@ public class WebSocketMessage {
     public ShipType shipType;
     public int x;
     public int y;
+    public SquareState squareState;
 
     public WebSocketMessage(){
 
@@ -39,6 +40,14 @@ public class WebSocketMessage {
         this.playerNr = playerNr;
         this.x = x;
         this.y = y;
+    }
+
+    public WebSocketMessage(WebSocketType webSocketType, int playerNr, int x, int y, SquareState squareState) {
+        this.webSocketType = webSocketType;
+        this.playerNr = playerNr;
+        this.x = x;
+        this.y = y;
+        this.squareState = squareState;
     }
 
     public WebSocketType getWebSocketType() {
@@ -103,5 +112,13 @@ public class WebSocketMessage {
 
     public void setY(int y) {
         this.y = y;
+    }
+
+    public SquareState getSquareState() {
+        return squareState;
+    }
+
+    public void setSquareState(SquareState squareState) {
+        this.squareState = squareState;
     }
 }

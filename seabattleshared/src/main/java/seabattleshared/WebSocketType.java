@@ -7,4 +7,7 @@ public enum WebSocketType {
     ERROR,
     FATALERROR,
     PLACESHIP,
+    REMOVESHIP,
+    SETSQUAREPLAYER,
+    CHECKOVERLAP,
 }

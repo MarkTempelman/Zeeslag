@@ -82,6 +82,12 @@ public class CommunicatorServerWebSocket {
                 case PLACESHIP:
                     gameManager.tryPlaceShip(wbMessage.playerNr, wbMessage.horizontal, wbMessage.shipType, wbMessage.x, wbMessage.y, this);
                     break;
+                case REMOVESHIP:
+                    gameManager.removeShip(wbMessage.playerNr, wbMessage.x, wbMessage.y, this);
+                    break;
+                case CHECKOVERLAP:
+                    gameManager.setSquareStateOnOverlap(wbMessage.playerNr, wbMessage.x, wbMessage.y, this);
+                    break;
                 default:
                     System.out.println("[WebSocket ERROR: cannot process Json message " + jsonMessage);
                     break;

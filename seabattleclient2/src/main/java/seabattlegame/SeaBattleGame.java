@@ -107,7 +107,7 @@ public class SeaBattleGame implements ISeaBattleGame {
     if(manager.shipTypeInList(shipType) || manager.allShips.size() >= 5){
       return;
     }
-    Ship ship = GameHelper.tryPlaceShip(shipType, bowX, bowY, horizontal);
+    Ship ship = GameHelper.createShip(shipType, bowX, bowY, horizontal);
     placeShipIfPossible(playerNr, ship);
   }
 
@@ -131,13 +131,26 @@ public class SeaBattleGame implements ISeaBattleGame {
     return managers.get(playerNr).checkIfOverlap(x, y);
   }
 
+  public void setSquareStateOnOverlap(int x, int y, int playerNr){
+    if(singlePlayerMode){
+      if(checkIfOnSquare(x, y, playerNr)){
+        applications.get(playerNr).showSquarePlayer(playerNr, x, y, SquareState.SHIP);
+        return;
+      }
+      applications.get(playerNr).showSquarePlayer(playerNr, x, y, SquareState.WATER);
+      return;
+    }
+    WebSocketMessage message = new WebSocketMessage(WebSocketType.CHECKOVERLAP, playerNr, x, y);
+    communicator.sendMessageToServer(message);
+  }
+
   @Override
   public void removeShip(int playerNr, int posX, int posY) {
    if(singlePlayerMode){
      removeShipSingleplayer(playerNr, posX, posY);
      return;
    }
-    removeShipMultiplayer();
+    removeShipMultiplayer(playerNr, posX, posY);
 
   }
 
@@ -155,8 +168,9 @@ public class SeaBattleGame implements ISeaBattleGame {
 
   }
 
-  private void removeShipMultiplayer(){
-
+  private void removeShipMultiplayer(int playerNr, int posX, int posY){
+    WebSocketMessage message = new WebSocketMessage(WebSocketType.REMOVESHIP, playerNr, posX, posY);
+    communicator.sendMessageToServer(message);
   }
 
 
