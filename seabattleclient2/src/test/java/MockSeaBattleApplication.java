@@ -1,7 +1,6 @@
 /*
  * Sea Battle Start project.
  */
-package seabattleunittests;
 
 import seabattlegui.ISeaBattleGUI;
 import seabattleshared.ShotType;

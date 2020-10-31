@@ -1,4 +1,5 @@
 module seabattleclient2 {
+    exports seabattlegame;
     requires javafx.controls;
     requires javafx.fxml;
     requires gson;
