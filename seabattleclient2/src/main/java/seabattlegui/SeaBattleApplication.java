@@ -578,14 +578,13 @@ public class SeaBattleApplication extends Application implements ISeaBattleGUI {
         buttonPlaceAllShips.setDisable(true);
         buttonRemoveAllShips.setDisable(true);
         buttonReadyToPlay.setDisable(true);
-        buttonStartNewGame.setDisable(true);
+        buttonStartNewGame.setDisable(false);
         buttonPlaceAircraftCarrier.setDisable(true);
         buttonPlaceBattleShip.setDisable(true);
         buttonPlaceCruiser.setDisable(true);
         buttonPlaceSubmarine.setDisable(true);
         buttonPlaceMineSweeper.setDisable(true);
         buttonRemoveShip.setDisable(true);
-        buttonStartNewGame.setDisable(false);
         showMessage("Start playing by selecting a square in " + opponentName + "\'s grid");
     }
     

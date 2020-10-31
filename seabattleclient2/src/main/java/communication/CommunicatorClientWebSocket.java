@@ -16,6 +16,7 @@ import javax.websocket.Session;
 import javax.websocket.WebSocketContainer;
 import javax.websocket.DeploymentException;
 
+import seabattlegame.Helper;
 import seabattlegame.SeaBattleGame;
 import seabattleshared.*;
 import java.io.IOException;
@@ -180,6 +181,9 @@ public class CommunicatorClientWebSocket extends Observable {
                     break;
                 case OPPONENTSHOT:
                     SeaBattleGame.UI.opponentFiresShot(wsMessage.playerNr, wsMessage.shotType);
+                    break;
+                case CLEARMAP:
+                    Helper.clearMap(wsMessage.playerNr, SeaBattleGame.UI);
                     break;
                 default:
                     System.out.println("[WebSocket ERROR: cannot process Json message " + jsonMessage);

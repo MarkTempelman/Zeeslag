@@ -19,6 +19,7 @@ import seabattleshared.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static seabattlegame.Helper.clearMap;
 import static seabattleshared.GameHelper.shotTypeToSquareState;
 
 /**
@@ -258,30 +259,19 @@ public class SeaBattleGame implements ISeaBattleGame {
       startNewGameSingleplayer(playerNr);
       return;
     }
-    startNewGameMultiplayer();
+    startNewGameMultiplayer(playerNr);
   }
   private void startNewGameSingleplayer(int playerNr) {
-    clearMap(playerNr);
-    if(singlePlayerMode){
-      applications = new ArrayList<>();
-      players = new ArrayList<>();
-      managers = new ArrayList<>();
-      return;
-    }
-    applications.remove(playerNr);
-    players.remove(playerNr);
-    managers.remove(playerNr);
-  }
-  private void startNewGameMultiplayer(){
-
+    clearMap(playerNr, applications.get(playerNr));
+    applications = new ArrayList<>();
+    players = new ArrayList<>();
+    managers = new ArrayList<>();
   }
 
-  private void clearMap(int playerNr){
-    for (int x = 0; x < 10; x++) {
-      for (int y = 0; y < 10; y++) {
-        applications.get(playerNr).showSquarePlayer(playerNr, x, y, SquareState.WATER);
-        applications.get(playerNr).showSquareOpponent(playerNr, x, y, SquareState.WATER);
-      }
-    }
+  private void startNewGameMultiplayer(int playerNr){
+    WebSocketMessage message = new WebSocketMessage(WebSocketType.STARTNEWGAME, playerNr);
+    communicator.sendMessageToServer(message);
   }
+
+
 }

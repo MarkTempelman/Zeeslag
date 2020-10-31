@@ -17,4 +17,6 @@ public enum WebSocketType {
     FIRESHOT,
     PLAYERSHOT,
     OPPONENTSHOT,
+    STARTNEWGAME,
+    CLEARMAP,
 }

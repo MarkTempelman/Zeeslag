@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import seabattleserver.GameManager;
 import seabattleshared.*;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -97,6 +99,9 @@ public class CommunicatorServerWebSocket {
                 case FIRESHOT:
                     gameManager.fireShot(wbMessage.playerNr, wbMessage.x, wbMessage.y, this);
                     break;
+                case STARTNEWGAME:
+                    gameManager.startNewGame(wbMessage.playerNr, this);
+                    break;
                 default:
                     System.out.println("[WebSocket ERROR: cannot process Json message " + jsonMessage);
                     break;
@@ -134,5 +139,15 @@ public class CommunicatorServerWebSocket {
     public void sendMessageToPlayer(int playerNr, WebSocketMessage webSocketMessage){
         currentSession = sessions.get(playerNr);
         currentSession.getAsyncRemote().sendText(gson.toJson(webSocketMessage));
+    }
+
+    public void closeSession(int playerNr){
+        try{
+            sessions.get(playerNr).close();
+            sessions.remove(playerNr);
+        } catch(IOException e){
+            System.out.println(e);
+        }
+
     }
 }

@@ -122,4 +122,24 @@ public class GameManager {
         communicator.sendMessageToPlayer(playerNr, new WebSocketMessage(WebSocketType.SETSQUAREOPPONENT, playerNr, posX, posY, squareState));
         communicator.sendMessageToPlayer(opponentNr, new WebSocketMessage(WebSocketType.SETSQUAREPLAYER, opponentNr, posX, posY, squareState));
     }
+
+    public void startNewGame(int playerNr, CommunicatorServerWebSocket communicator){
+        this.communicator = communicator;
+
+        if(shipManagers.size() == 2){
+            communicator.sendMessageToPlayer(playerNr, new WebSocketMessage(WebSocketType.CLEARMAP, playerNr));
+            shipManagers.remove(playerNr);
+            playerNames.remove(playerNr);
+            readyPlayers.remove(playerNr);
+            communicator.closeSession(playerNr);
+
+        } else {
+            communicator.sendMessageToPlayer(0, new WebSocketMessage(WebSocketType.CLEARMAP, playerNr));
+            shipManagers.clear();
+            playerNames.clear();
+            readyPlayers.clear();
+            communicator.closeSession(0);
+        }
+
+    }
 }
