@@ -89,6 +89,9 @@ public class SeaBattleGame implements ISeaBattleGame {
 
   @Override
   public void placeShipsAutomatically(int playerNr) {
+    if(managers.get(playerNr).allShips.size() >= 1){
+      throw new IllegalArgumentException("There has already a ship been placed");
+    }
     IStrategy strategy = new SimpleStrategy();
     List<Ship> ships = strategy.placeShips();
     for (Ship ship: ships){
