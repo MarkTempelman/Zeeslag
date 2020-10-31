@@ -6,9 +6,9 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="seabattleclient2" />
         <module name="seabattleserver" />
         <module name="seabattleshared" />
+        <module name="seabattleclient2" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="11">
