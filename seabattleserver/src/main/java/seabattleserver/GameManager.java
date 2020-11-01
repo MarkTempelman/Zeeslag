@@ -3,6 +3,7 @@ package seabattleserver;
 import seabattleshared.*;
 import servercommunicator.CommunicatorServer;
 import servercommunicator.CommunicatorServerWebSocket;
+import servercommunicator.ICommunicatorServerWebSocket;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +13,7 @@ import static seabattleshared.GameHelper.shotTypeToSquareState;
 public class GameManager {
     private static ArrayList<String> playerNames = new ArrayList<>();
     private static ArrayList<ShipManager> shipManagers = new ArrayList<>();
-    private CommunicatorServerWebSocket communicator;
+    private ICommunicatorServerWebSocket communicator;
 
     private static ArrayList<java.lang.Integer> readyPlayers = new ArrayList<>();
 
@@ -34,7 +35,7 @@ public class GameManager {
         return 0;
     }
 
-    public void tryPlaceShip(int playerNr, boolean horizontal, ShipType shipType, int bowX, int bowY, CommunicatorServerWebSocket communicator){
+    public void tryPlaceShip(int playerNr, boolean horizontal, ShipType shipType, int bowX, int bowY, ICommunicatorServerWebSocket communicator){
         this.communicator = communicator;
         ShipManager manager = shipManagers.get(playerNr);
         if(manager.shipTypeInList(shipType) || manager.allShips.size() >= 5){
@@ -59,7 +60,7 @@ public class GameManager {
         }
     }
 
-    public void removeShip(int playerNr, int posX, int posY, CommunicatorServerWebSocket communicator){
+    public void removeShip(int playerNr, int posX, int posY, ICommunicatorServerWebSocket communicator){
         this.communicator = communicator;
         List<Position> positions = shipManagers.get(playerNr).getAllPositions();
         List<Position> deletePositions;
@@ -73,7 +74,7 @@ public class GameManager {
         }
     }
 
-    public void setSquareStateOnOverlap(int playerNr, int posX, int posY, CommunicatorServerWebSocket communicator){
+    public void setSquareStateOnOverlap(int playerNr, int posX, int posY, ICommunicatorServerWebSocket communicator){
         this.communicator = communicator;
         if(shipManagers.get(playerNr).checkIfOverlap(posX, posY)){
             communicator.sendMessageToPlayer(playerNr, new WebSocketMessage(WebSocketType.SETSQUAREPLAYER, playerNr, posX, posY, SquareState.SHIP));
@@ -82,7 +83,7 @@ public class GameManager {
         }
     }
 
-    public void removeAllShips(int playerNr, CommunicatorServerWebSocket communicator){
+    public void removeAllShips(int playerNr, ICommunicatorServerWebSocket communicator){
         this.communicator = communicator;
         List<Position> positions = shipManagers.get(playerNr).removeAllShips();
         for(Position pos : positions){
@@ -90,7 +91,7 @@ public class GameManager {
         }
     }
 
-    public void notifyWhenReady(int playerNr, CommunicatorServerWebSocket communicator){
+    public void notifyWhenReady(int playerNr, ICommunicatorServerWebSocket communicator){
         this.communicator = communicator;
         if(shipManagers.get(playerNr).allShips.size() == 5){
             readyPlayer(playerNr);
@@ -110,7 +111,7 @@ public class GameManager {
         }
     }
 
-    public void fireShot(int playerNr, int posX, int posY, CommunicatorServerWebSocket communicator){
+    public void fireShot(int playerNr, int posX, int posY, ICommunicatorServerWebSocket communicator){
         this.communicator = communicator;
         int opponentNr = getOpponentNumber(playerNr);
         ShotType shotType = shipManagers.get(opponentNr).receiveShot(posX, posY);
@@ -123,7 +124,7 @@ public class GameManager {
         communicator.sendMessageToPlayer(opponentNr, new WebSocketMessage(WebSocketType.SETSQUAREPLAYER, opponentNr, posX, posY, squareState));
     }
 
-    public void startNewGame(int playerNr, CommunicatorServerWebSocket communicator){
+    public void startNewGame(int playerNr, ICommunicatorServerWebSocket communicator){
         this.communicator = communicator;
 
         if(shipManagers.size() == 2){

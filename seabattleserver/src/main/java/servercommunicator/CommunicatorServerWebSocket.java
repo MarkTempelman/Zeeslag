@@ -19,7 +19,7 @@ import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
 @ServerEndpoint(value="/communicator/")
-public class CommunicatorServerWebSocket {
+public class CommunicatorServerWebSocket implements ICommunicatorServerWebSocket{
     // All sessions
     public static final List<Session> sessions = new ArrayList<>();
 
