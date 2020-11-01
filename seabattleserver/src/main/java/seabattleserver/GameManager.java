@@ -5,34 +5,41 @@ import servercommunicator.CommunicatorServer;
 import servercommunicator.CommunicatorServerWebSocket;
 import servercommunicator.ICommunicatorServerWebSocket;
 
+import javax.websocket.Session;
 import java.util.ArrayList;
 import java.util.List;
 
 import static seabattleshared.GameHelper.shotTypeToSquareState;
 
 public class GameManager {
-    private static ArrayList<String> playerNames = new ArrayList<>();
-    private static ArrayList<ShipManager> shipManagers = new ArrayList<>();
+    private ArrayList<ShipManager> shipManagers = new ArrayList<>();
     private ICommunicatorServerWebSocket communicator;
 
-    private static ArrayList<java.lang.Integer> readyPlayers = new ArrayList<>();
+    private ArrayList<Player> players = new ArrayList<>();
+    private ArrayList<java.lang.Integer> readyPlayers = new ArrayList<>();
 
-    public ArrayList<String> getPlayerNames(){
-        return playerNames;
-    }
+    private boolean acceptsNewPlayers = true;
 
-    public int registerPlayer(String name){
-        int playerNumber = playerNames.size();
-        playerNames.add(name);
+    public void registerPlayer(String name, int playerNr, Session session, ICommunicatorServerWebSocket communicator){
+        this.communicator = communicator;
+        Player player = new Player(session, playerNr, name);
+        players.add(player);
         shipManagers.add(new ShipManager());
-        return playerNumber;
+        communicator.sendMessageToPlayer(session, new WebSocketMessage(WebSocketType.REGISTERPLAYER, name, playerNr));
+        if(players.size() == 2){
+            acceptsNewPlayers = false;
+            Player opponent = getOpponent(playerNr);
+            communicator.sendMessageToPlayer(session, new WebSocketMessage(WebSocketType.REGISTEROPPONENT, opponent.getName(), playerNr));
+            communicator.sendMessageToPlayer(opponent.getSession(), new WebSocketMessage(WebSocketType.REGISTEROPPONENT, player.getName(), opponent.getPlayerNr()));
+        }
     }
 
-    public int getOpponentNumber(int playerNr){
-        if(playerNr == 0){
-            return 1;
-        }
-        return 0;
+    private Player getOpponent(int playerNr){
+        return players.stream().filter(player -> player.getPlayerNr() != playerNr).findFirst().orElse(null);
+    }
+
+    private Player getPlayer(int playerNr){
+        return players.stream().filter(player -> player.getPlayerNr() == playerNr).findFirst().orElse(null);
     }
 
     public void tryPlaceShip(int playerNr, boolean horizontal, ShipType shipType, int bowX, int bowY, ICommunicatorServerWebSocket communicator){
@@ -46,15 +53,16 @@ public class GameManager {
     }
 
     private void placeShipIfPossible(int playerNr, Ship ship){
+        Session session = getPlayer(playerNr).getSession();
         if(GameHelper.canShipBePlaced(ship, shipManagers.get(playerNr))){
             for (Position position : ship.getPositions()) {
-                communicator.sendMessageToPlayer(playerNr, new WebSocketMessage(
+                communicator.sendMessageToPlayer(session, new WebSocketMessage(
                         WebSocketType.SETSQUAREPLAYER, playerNr, position.getX(), position.getY(), SquareState.SHIP
                     ));
             }
             shipManagers.get(playerNr).addShip(ship);
         } else {
-            communicator.sendMessageToPlayer(playerNr, new WebSocketMessage(
+            communicator.sendMessageToPlayer(session, new WebSocketMessage(
                     WebSocketType.ERROR, "this ship can't be placed here"
             ));
         }
@@ -68,7 +76,7 @@ public class GameManager {
             if(pos.getX() == posX && pos.getY() == posY){
                 deletePositions = shipManagers.get(playerNr).removeShip(pos);
                 for (Position delete: deletePositions) {
-                    communicator.sendMessageToPlayer(playerNr, new WebSocketMessage(WebSocketType.SETSQUAREPLAYER, playerNr, delete.getX(), delete.getY(), SquareState.WATER));
+                    communicator.sendMessageToPlayer(getPlayer(playerNr).getSession(), new WebSocketMessage(WebSocketType.SETSQUAREPLAYER, playerNr, delete.getX(), delete.getY(), SquareState.WATER));
                 }
             }
         }
@@ -76,32 +84,35 @@ public class GameManager {
 
     public void setSquareStateOnOverlap(int playerNr, int posX, int posY, ICommunicatorServerWebSocket communicator){
         this.communicator = communicator;
+        Session session = getPlayer(playerNr).getSession();
         if(shipManagers.get(playerNr).checkIfOverlap(posX, posY)){
-            communicator.sendMessageToPlayer(playerNr, new WebSocketMessage(WebSocketType.SETSQUAREPLAYER, playerNr, posX, posY, SquareState.SHIP));
+            communicator.sendMessageToPlayer(session, new WebSocketMessage(WebSocketType.SETSQUAREPLAYER, playerNr, posX, posY, SquareState.SHIP));
         } else {
-            communicator.sendMessageToPlayer(playerNr, new WebSocketMessage(WebSocketType.SETSQUAREPLAYER, playerNr, posX, posY, SquareState.WATER));
+            communicator.sendMessageToPlayer(session, new WebSocketMessage(WebSocketType.SETSQUAREPLAYER, playerNr, posX, posY, SquareState.WATER));
         }
     }
 
     public void removeAllShips(int playerNr, ICommunicatorServerWebSocket communicator){
         this.communicator = communicator;
+        Session session = getPlayer(playerNr).getSession();
         List<Position> positions = shipManagers.get(playerNr).removeAllShips();
         for(Position pos : positions){
-            communicator.sendMessageToPlayer(playerNr, new WebSocketMessage(WebSocketType.SETSQUAREPLAYER, playerNr, pos.getX(), pos.getY(), SquareState.WATER));
+            communicator.sendMessageToPlayer(session, new WebSocketMessage(WebSocketType.SETSQUAREPLAYER, playerNr, pos.getX(), pos.getY(), SquareState.WATER));
         }
     }
 
     public void notifyWhenReady(int playerNr, ICommunicatorServerWebSocket communicator){
         this.communicator = communicator;
+        Session session = getPlayer(playerNr).getSession();
         if(shipManagers.get(playerNr).allShips.size() == 5){
             readyPlayer(playerNr);
             if(readyPlayers.size() == 2){
-                communicator.sendMessageToPlayer(playerNr, new WebSocketMessage(WebSocketType.STARTGAME, playerNr));
-                int opponentNr = getOpponentNumber(playerNr);
-                communicator.sendMessageToPlayer(opponentNr, new WebSocketMessage(WebSocketType.STARTGAME, opponentNr));
+                communicator.sendMessageToPlayer(session, new WebSocketMessage(WebSocketType.STARTGAME, playerNr));
+                Player opponent = getOpponent(playerNr);
+                communicator.sendMessageToPlayer(opponent.getSession(), new WebSocketMessage(WebSocketType.STARTGAME, opponent.getPlayerNr()));
             }
         } else {
-            communicator.sendMessageToPlayer(playerNr, new WebSocketMessage(WebSocketType.ERROR, playerNr, "Not all ships have been placed!"));
+            communicator.sendMessageToPlayer(session, new WebSocketMessage(WebSocketType.ERROR, playerNr, "Not all ships have been placed!"));
         }
     }
 
@@ -113,34 +124,28 @@ public class GameManager {
 
     public void fireShot(int playerNr, int posX, int posY, ICommunicatorServerWebSocket communicator){
         this.communicator = communicator;
-        int opponentNr = getOpponentNumber(playerNr);
-        ShotType shotType = shipManagers.get(opponentNr).receiveShot(posX, posY);
+        Player player = getPlayer(playerNr);
+        Player opponent = getOpponent(playerNr);
+        ShotType shotType = shipManagers.get(opponent.getPlayerNr()).receiveShot(posX, posY);
         SquareState squareState = shotTypeToSquareState(shotType);
 
-        communicator.sendMessageToPlayer(playerNr, new WebSocketMessage(WebSocketType.PLAYERSHOT, playerNr, shotType));
-        communicator.sendMessageToPlayer(opponentNr, new WebSocketMessage(WebSocketType.OPPONENTSHOT, opponentNr, shotType));
+        communicator.sendMessageToPlayer(player.getSession(), new WebSocketMessage(WebSocketType.PLAYERSHOT, playerNr, shotType));
+        communicator.sendMessageToPlayer(opponent.getSession(), new WebSocketMessage(WebSocketType.OPPONENTSHOT, opponent.getPlayerNr(), shotType));
 
-        communicator.sendMessageToPlayer(playerNr, new WebSocketMessage(WebSocketType.SETSQUAREOPPONENT, playerNr, posX, posY, squareState));
-        communicator.sendMessageToPlayer(opponentNr, new WebSocketMessage(WebSocketType.SETSQUAREPLAYER, opponentNr, posX, posY, squareState));
+        communicator.sendMessageToPlayer(player.getSession(), new WebSocketMessage(WebSocketType.SETSQUAREOPPONENT, playerNr, posX, posY, squareState));
+        communicator.sendMessageToPlayer(opponent.getSession(), new WebSocketMessage(WebSocketType.SETSQUAREPLAYER, opponent.getPlayerNr(), posX, posY, squareState));
     }
 
     public void startNewGame(int playerNr, ICommunicatorServerWebSocket communicator){
         this.communicator = communicator;
 
-        if(shipManagers.size() == 2){
-            communicator.sendMessageToPlayer(playerNr, new WebSocketMessage(WebSocketType.CLEARMAP, playerNr));
-            shipManagers.remove(playerNr);
-            playerNames.remove(playerNr);
-            readyPlayers.remove(playerNr);
-            communicator.closeSession(playerNr);
+        communicator.sendMessageToPlayer(getPlayer(playerNr).getSession(), new WebSocketMessage(WebSocketType.CLEARMAP, playerNr));
+        shipManagers.remove(playerNr);
+        readyPlayers.remove(playerNr);
+        communicator.closeSession(playerNr);
+    }
 
-        } else {
-            communicator.sendMessageToPlayer(0, new WebSocketMessage(WebSocketType.CLEARMAP, playerNr));
-            shipManagers.clear();
-            playerNames.clear();
-            readyPlayers.clear();
-            communicator.closeSession(0);
-        }
-
+    public boolean isAcceptsNewPlayers() {
+        return acceptsNewPlayers;
     }
 }

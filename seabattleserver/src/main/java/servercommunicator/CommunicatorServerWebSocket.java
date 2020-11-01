@@ -26,7 +26,10 @@ public class CommunicatorServerWebSocket implements ICommunicatorServerWebSocket
     // Map each property to list of sessions that are subscribed to that property
     public static final Map<String,List<Session>> propertySessions = new HashMap<>();
 
-    private GameManager gameManager = new GameManager();
+    private static GameManager gameManager = new GameManager();
+    private static ArrayList<GameManager> gameManagers = new ArrayList<>();
+
+    private static int lastPlayerNr = -1;
 
     private WebSocketMessage webSocketResponse;
     private Session currentSession;
@@ -79,7 +82,7 @@ public class CommunicatorServerWebSocket implements ICommunicatorServerWebSocket
         if (null != operation) {
             switch (operation) {
                 case REGISTER:
-                    tryRegisterUser(numberOfSessions, wbMessage);
+                    tryRegisterUser(session, wbMessage.name);
                     break;
                 case PLACESHIP:
                     gameManager.tryPlaceShip(wbMessage.playerNr, wbMessage.horizontal, wbMessage.shipType, wbMessage.x, wbMessage.y, this);
@@ -109,36 +112,48 @@ public class CommunicatorServerWebSocket implements ICommunicatorServerWebSocket
         }
     }
 
-    private void tryRegisterUser(int numberOfSessions, WebSocketMessage wbMessage){
-        if(sessions.size() > 2){
-            failedToRegisterUser(numberOfSessions);
-            return;
+    private void tryRegisterUser(Session session, String name){
+        GameManager gameManager = gameManagers.stream().filter(GameManager::isAcceptsNewPlayers).findFirst().orElse(null);
+        int playerNr = lastPlayerNr + 1;
+        lastPlayerNr++;
+        if(gameManager == null){
+            gameManager = new GameManager();
+            gameManager.registerPlayer(name, playerNr, session, this);
+            gameManagers.add(gameManager);
+        } else {
+            gameManager.registerPlayer(name, playerNr, session, this);
         }
-        int playerNr = gameManager.registerPlayer(wbMessage.name);
-        registerUser(playerNr, false);
-        if(playerNr == 1){
-            registerUser(playerNr, true);
-            registerUser(gameManager.getOpponentNumber(playerNr), true);
-        }
     }
 
-    private void failedToRegisterUser(int numberOfSessions){
-        webSocketResponse = new WebSocketMessage(WebSocketType.FATALERROR, "This lobby is full");
-        sendMessageToPlayer(numberOfSessions - 1, webSocketResponse);
-    }
+//    private void tryRegisterUser(int numberOfSessions, WebSocketMessage wbMessage){
+//        if(sessions.size() > 2){
+//            failedToRegisterUser(numberOfSessions);
+//            return;
+//        }
+//        int playerNr = gameManager.registerPlayer(wbMessage.name);
+//        registerUser(playerNr, false);
+//        if(playerNr == 1){
+//            registerUser(playerNr, true);
+//            registerUser(gameManager.getOpponentNumber(playerNr), true);
+//        }
+//    }
 
-    private void registerUser(int playerNr, boolean isOpponent){
-        webSocketResponse = new WebSocketMessage(
-                isOpponent ? WebSocketType.REGISTEROPPONENT : WebSocketType.REGISTERPLAYER,
-                isOpponent ? gameManager.getPlayerNames().get(gameManager.getOpponentNumber(playerNr)) : gameManager.getPlayerNames().get(playerNr),
-                playerNr
-        );
-        sendMessageToPlayer(playerNr, webSocketResponse);
-    }
+//    private void failedToRegisterUser(int numberOfSessions){
+//        webSocketResponse = new WebSocketMessage(WebSocketType.FATALERROR, "This lobby is full");
+//        sendMessageToPlayer(numberOfSessions - 1, webSocketResponse);
+//    }
+//
+//    private void registerUser(int playerNr, boolean isOpponent){
+//        webSocketResponse = new WebSocketMessage(
+//                isOpponent ? WebSocketType.REGISTEROPPONENT : WebSocketType.REGISTERPLAYER,
+//                isOpponent ? gameManager.getPlayerNames().get(gameManager.getOpponentNumber(playerNr)) : gameManager.getPlayerNames().get(playerNr),
+//                playerNr
+//        );
+//        sendMessageToPlayer(playerNr, webSocketResponse);
+//    }
 
-    public void sendMessageToPlayer(int playerNr, WebSocketMessage webSocketMessage){
-        currentSession = sessions.get(playerNr);
-        currentSession.getAsyncRemote().sendText(gson.toJson(webSocketMessage));
+    public void sendMessageToPlayer(Session session, WebSocketMessage webSocketMessage){
+        session.getAsyncRemote().sendText(gson.toJson(webSocketMessage));
     }
 
     public void closeSession(int playerNr){
