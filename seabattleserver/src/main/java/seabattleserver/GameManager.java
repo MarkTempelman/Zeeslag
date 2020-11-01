@@ -1,30 +1,27 @@
 package seabattleserver;
 
 import seabattleshared.*;
-import servercommunicator.CommunicatorServer;
-import servercommunicator.CommunicatorServerWebSocket;
 import servercommunicator.ICommunicatorServerWebSocket;
 
 import javax.websocket.Session;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static seabattleshared.GameHelper.shotTypeToSquareState;
 
 public class GameManager {
-    private ArrayList<ShipManager> shipManagers = new ArrayList<>();
     private ICommunicatorServerWebSocket communicator;
 
     private ArrayList<Player> players = new ArrayList<>();
-    private ArrayList<java.lang.Integer> readyPlayers = new ArrayList<>();
 
     private boolean acceptsNewPlayers = true;
 
-    public void registerPlayer(String name, int playerNr, Session session, ICommunicatorServerWebSocket communicator){
+    public void registerPlayer(String name, Session session, ICommunicatorServerWebSocket communicator){
         this.communicator = communicator;
-        Player player = new Player(session, playerNr, name);
+        int playerNr = players.size();
+        Player player = new Player(session, playerNr, name, new ShipManager());
         players.add(player);
-        shipManagers.add(new ShipManager());
         communicator.sendMessageToPlayer(session, new WebSocketMessage(WebSocketType.REGISTERPLAYER, name, playerNr));
         if(players.size() == 2){
             acceptsNewPlayers = false;
@@ -44,7 +41,7 @@ public class GameManager {
 
     public void tryPlaceShip(int playerNr, boolean horizontal, ShipType shipType, int bowX, int bowY, ICommunicatorServerWebSocket communicator){
         this.communicator = communicator;
-        ShipManager manager = shipManagers.get(playerNr);
+        ShipManager manager = getPlayer(playerNr).getShipManager();
         if(manager.shipTypeInList(shipType) || manager.allShips.size() >= 5){
             return;
         }
@@ -54,13 +51,14 @@ public class GameManager {
 
     private void placeShipIfPossible(int playerNr, Ship ship){
         Session session = getPlayer(playerNr).getSession();
-        if(GameHelper.canShipBePlaced(ship, shipManagers.get(playerNr))){
+        ShipManager manager = getPlayer(playerNr).getShipManager();
+        if(GameHelper.canShipBePlaced(ship, manager)){
             for (Position position : ship.getPositions()) {
                 communicator.sendMessageToPlayer(session, new WebSocketMessage(
                         WebSocketType.SETSQUAREPLAYER, playerNr, position.getX(), position.getY(), SquareState.SHIP
                     ));
             }
-            shipManagers.get(playerNr).addShip(ship);
+            manager.addShip(ship);
         } else {
             communicator.sendMessageToPlayer(session, new WebSocketMessage(
                     WebSocketType.ERROR, "this ship can't be placed here"
@@ -70,11 +68,12 @@ public class GameManager {
 
     public void removeShip(int playerNr, int posX, int posY, ICommunicatorServerWebSocket communicator){
         this.communicator = communicator;
-        List<Position> positions = shipManagers.get(playerNr).getAllPositions();
+        ShipManager manager = getPlayer(playerNr).getShipManager();
+        List<Position> positions = manager.getAllPositions();
         List<Position> deletePositions;
         for (Position pos: positions) {
             if(pos.getX() == posX && pos.getY() == posY){
-                deletePositions = shipManagers.get(playerNr).removeShip(pos);
+                deletePositions = manager.removeShip(pos);
                 for (Position delete: deletePositions) {
                     communicator.sendMessageToPlayer(getPlayer(playerNr).getSession(), new WebSocketMessage(WebSocketType.SETSQUAREPLAYER, playerNr, delete.getX(), delete.getY(), SquareState.WATER));
                 }
@@ -85,7 +84,8 @@ public class GameManager {
     public void setSquareStateOnOverlap(int playerNr, int posX, int posY, ICommunicatorServerWebSocket communicator){
         this.communicator = communicator;
         Session session = getPlayer(playerNr).getSession();
-        if(shipManagers.get(playerNr).checkIfOverlap(posX, posY)){
+        ShipManager manager = getPlayer(playerNr).getShipManager();
+        if(manager.checkIfOverlap(posX, posY)){
             communicator.sendMessageToPlayer(session, new WebSocketMessage(WebSocketType.SETSQUAREPLAYER, playerNr, posX, posY, SquareState.SHIP));
         } else {
             communicator.sendMessageToPlayer(session, new WebSocketMessage(WebSocketType.SETSQUAREPLAYER, playerNr, posX, posY, SquareState.WATER));
@@ -95,7 +95,7 @@ public class GameManager {
     public void removeAllShips(int playerNr, ICommunicatorServerWebSocket communicator){
         this.communicator = communicator;
         Session session = getPlayer(playerNr).getSession();
-        List<Position> positions = shipManagers.get(playerNr).removeAllShips();
+        List<Position> positions = getPlayer(playerNr).getShipManager().removeAllShips();
         for(Position pos : positions){
             communicator.sendMessageToPlayer(session, new WebSocketMessage(WebSocketType.SETSQUAREPLAYER, playerNr, pos.getX(), pos.getY(), SquareState.WATER));
         }
@@ -104,9 +104,10 @@ public class GameManager {
     public void notifyWhenReady(int playerNr, ICommunicatorServerWebSocket communicator){
         this.communicator = communicator;
         Session session = getPlayer(playerNr).getSession();
-        if(shipManagers.get(playerNr).allShips.size() == 5){
+        ShipManager manager = getPlayer(playerNr).getShipManager();
+        if(manager.allShips.size() == 5){
             readyPlayer(playerNr);
-            if(readyPlayers.size() == 2){
+            if(players.stream().filter(Player::isReady).collect(Collectors.toList()).size() == 2){
                 communicator.sendMessageToPlayer(session, new WebSocketMessage(WebSocketType.STARTGAME, playerNr));
                 Player opponent = getOpponent(playerNr);
                 communicator.sendMessageToPlayer(opponent.getSession(), new WebSocketMessage(WebSocketType.STARTGAME, opponent.getPlayerNr()));
@@ -117,16 +118,14 @@ public class GameManager {
     }
 
     private void readyPlayer(int playerNr){
-        if(!readyPlayers.contains(playerNr)){
-            readyPlayers.add(playerNr);
-        }
+        players.stream().filter(player -> player.getPlayerNr() == playerNr).findFirst().orElse(null).setReady(true);
     }
 
     public void fireShot(int playerNr, int posX, int posY, ICommunicatorServerWebSocket communicator){
         this.communicator = communicator;
         Player player = getPlayer(playerNr);
         Player opponent = getOpponent(playerNr);
-        ShotType shotType = shipManagers.get(opponent.getPlayerNr()).receiveShot(posX, posY);
+        ShotType shotType = opponent.getShipManager().receiveShot(posX, posY);
         SquareState squareState = shotTypeToSquareState(shotType);
 
         communicator.sendMessageToPlayer(player.getSession(), new WebSocketMessage(WebSocketType.PLAYERSHOT, playerNr, shotType));
@@ -140,12 +139,19 @@ public class GameManager {
         this.communicator = communicator;
 
         communicator.sendMessageToPlayer(getPlayer(playerNr).getSession(), new WebSocketMessage(WebSocketType.CLEARMAP, playerNr));
-        shipManagers.remove(playerNr);
-        readyPlayers.remove(playerNr);
-        communicator.closeSession(playerNr);
+
+        communicator.closeSession(getPlayer(playerNr).getSession());
     }
 
     public boolean isAcceptsNewPlayers() {
         return acceptsNewPlayers;
+    }
+
+    public boolean containsPlayer(Session session){
+        Player player = players.stream().filter(p -> p.getSession() == session).findFirst().orElse(null);
+        if(player != null){
+            return true;
+        }
+        return false;
     }
 }

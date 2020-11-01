@@ -26,10 +26,7 @@ public class CommunicatorServerWebSocket implements ICommunicatorServerWebSocket
     // Map each property to list of sessions that are subscribed to that property
     public static final Map<String,List<Session>> propertySessions = new HashMap<>();
 
-    private static GameManager gameManager = new GameManager();
     private static ArrayList<GameManager> gameManagers = new ArrayList<>();
-
-    private static int lastPlayerNr = -1;
 
     private WebSocketMessage webSocketResponse;
     private Session currentSession;
@@ -66,8 +63,6 @@ public class CommunicatorServerWebSocket implements ICommunicatorServerWebSocket
     public void handleMessageFromClient(String jsonMessage, Session session) {
         WebSocketMessage wbMessage = null;
 
-        int numberOfSessions = sessions.size();
-
         try {
             wbMessage = gson.fromJson(jsonMessage,WebSocketMessage.class);
         }
@@ -85,25 +80,25 @@ public class CommunicatorServerWebSocket implements ICommunicatorServerWebSocket
                     tryRegisterUser(session, wbMessage.name);
                     break;
                 case PLACESHIP:
-                    gameManager.tryPlaceShip(wbMessage.playerNr, wbMessage.horizontal, wbMessage.shipType, wbMessage.x, wbMessage.y, this);
+                    tryFindGameManager(session).tryPlaceShip(wbMessage.playerNr, wbMessage.horizontal, wbMessage.shipType, wbMessage.x, wbMessage.y, this);
                     break;
                 case REMOVESHIP:
-                    gameManager.removeShip(wbMessage.playerNr, wbMessage.x, wbMessage.y, this);
+                    tryFindGameManager(session).removeShip(wbMessage.playerNr, wbMessage.x, wbMessage.y, this);
                     break;
                 case CHECKOVERLAP:
-                    gameManager.setSquareStateOnOverlap(wbMessage.playerNr, wbMessage.x, wbMessage.y, this);
+                    tryFindGameManager(session).setSquareStateOnOverlap(wbMessage.playerNr, wbMessage.x, wbMessage.y, this);
                     break;
                 case REMOVEALLSHIPS:
-                    gameManager.removeAllShips(wbMessage.playerNr, this);
+                    tryFindGameManager(session).removeAllShips(wbMessage.playerNr, this);
                     break;
                 case READY:
-                    gameManager.notifyWhenReady(wbMessage.playerNr, this);
+                    tryFindGameManager(session).notifyWhenReady(wbMessage.playerNr, this);
                     break;
                 case FIRESHOT:
-                    gameManager.fireShot(wbMessage.playerNr, wbMessage.x, wbMessage.y, this);
+                    tryFindGameManager(session).fireShot(wbMessage.playerNr, wbMessage.x, wbMessage.y, this);
                     break;
                 case STARTNEWGAME:
-                    gameManager.startNewGame(wbMessage.playerNr, this);
+                    tryFindGameManager(session).startNewGame(wbMessage.playerNr, this);
                     break;
                 default:
                     System.out.println("[WebSocket ERROR: cannot process Json message " + jsonMessage);
@@ -113,15 +108,13 @@ public class CommunicatorServerWebSocket implements ICommunicatorServerWebSocket
     }
 
     private void tryRegisterUser(Session session, String name){
-        GameManager gameManager = gameManagers.stream().filter(GameManager::isAcceptsNewPlayers).findFirst().orElse(null);
-        int playerNr = lastPlayerNr + 1;
-        lastPlayerNr++;
+        GameManager gameManager = gameManagers.stream().filter(GameManager::isAcceptsNewPlayers).findFirst().orElse(null);;
         if(gameManager == null){
             gameManager = new GameManager();
-            gameManager.registerPlayer(name, playerNr, session, this);
+            gameManager.registerPlayer(name, session, this);
             gameManagers.add(gameManager);
         } else {
-            gameManager.registerPlayer(name, playerNr, session, this);
+            gameManager.registerPlayer(name, session, this);
         }
     }
 
@@ -156,13 +149,17 @@ public class CommunicatorServerWebSocket implements ICommunicatorServerWebSocket
         session.getAsyncRemote().sendText(gson.toJson(webSocketMessage));
     }
 
-    public void closeSession(int playerNr){
+    public void closeSession(Session session){
         try{
-            sessions.get(playerNr).close();
-            sessions.remove(playerNr);
+            session.close();
+            sessions.remove(session);
         } catch(IOException e){
             System.out.println(e);
         }
 
+    }
+
+    private GameManager tryFindGameManager(Session session){
+        return gameManagers.stream().filter(gameManager -> gameManager.containsPlayer(session)).findFirst().orElse(null);
     }
 }
